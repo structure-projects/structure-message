@@ -96,23 +96,15 @@ structure:
 # 消息中心配置
 message:
   center:
-    # 插件配置
-    plugin:
-      enabled: true
-      scan-packages:
-        - com.structure.message.plugin
-    # 异步发送配置
+  # 线程池配置
+  executor:
     async:
-      enabled: true
-      core-pool-size: 10
-      max-pool-size: 50
-      queue-capacity: 1000
-      thread-name-prefix: MessageSender-
-    # 重试配置
-    retry:
-      enabled: true
-      max-times: 3
-      delay-millis: 5000
+      core-pool-size: 3
+      max-pool-size: 8
+      queue-capacity: 200
+      thread-name-prefix: message-async-
+      await-termination-seconds: 60
+      rejection-policy: CALLER_RUNS
 
 # Swagger配置
 swagger:

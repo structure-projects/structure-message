@@ -4,6 +4,7 @@ import com.structure.message.common.model.MessageContext;
 import com.structure.message.common.model.MessageResult;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * 消息服务接口
@@ -16,9 +17,19 @@ public interface MessageService {
     MessageResult sendMessage(MessageContext context);
 
     /**
+     * 异步发送单条消息
+     */
+    CompletableFuture<MessageResult> sendMessageAsync(MessageContext context);
+
+    /**
      * 批量发送消息
      */
     List<MessageResult> sendBatchMessages(List<MessageContext> contexts);
+
+    /**
+     * 异步批量发送消息
+     */
+    CompletableFuture<List<MessageResult>> sendBatchMessagesAsync(List<MessageContext> contexts);
 
     /**
      * 重新发送消息

@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
  *
  * @author chuck
  */
+@EnableSwagger
 @SpringBootApplication
 @ComponentScan(basePackages = {"cn.structure.message", "com.structure.message"})
 @MapperScan(basePackages = {"com.structure.message.core.mapper"})

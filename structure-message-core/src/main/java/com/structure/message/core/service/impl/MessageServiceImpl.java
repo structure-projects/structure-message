@@ -14,18 +14,20 @@ import com.structure.message.core.plugin.PluginManager;
 import com.structure.message.core.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
-/**
- * 消息服务实现类
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -33,6 +35,10 @@ public class MessageServiceImpl implements MessageService {
 
     private final PluginManager pluginManager;
     private final MessageRecordMapper messageRecordMapper;
+
+    @Autowired
+    @Qualifier("messageAsyncExecutor")
+    private Executor messageAsyncExecutor;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -81,7 +87,32 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    @Async("messageExecutor")
+    public CompletableFuture<MessageResult> sendMessageAsync(MessageContext context) {
+        log.info("异步发送消息，通道：{}，接收者：{}，线程池：messageAsyncExecutor",
+                context.getChannelCode(), context.getReceiver());
+
+        CompletableFuture<MessageResult> future = new CompletableFuture<>();
+
+        CompletableFuture.runAsync(() -> {
+            try {
+                MessageResult result = sendMessage(context);
+                future.complete(result);
+            } catch (Exception e) {
+                log.error("异步发送消息失败，通道：{}，接收者：{}",
+                        context.getChannelCode(), context.getReceiver(), e);
+                future.complete(MessageResult.failure(
+                    context.getChannelCode(),
+                    context.getReceiver(),
+                    "ASYNC_SEND_ERROR",
+                    e.getMessage()
+                ));
+            }
+        }, messageAsyncExecutor);
+
+        return future;
+    }
+
+    @Override
     public List<MessageResult> sendBatchMessages(List<MessageContext> contexts) {
         log.info("开始批量发送消息，数量：{}", contexts.size());
 
@@ -107,6 +138,34 @@ public class MessageServiceImpl implements MessageService {
                 results.stream().filter(r -> !r.isSuccess()).count());
 
         return results;
+    }
+
+    @Override
+    public CompletableFuture<List<MessageResult>> sendBatchMessagesAsync(List<MessageContext> contexts) {
+        log.info("异步批量发送消息，数量：{}，线程池：messageAsyncExecutor", contexts.size());
+
+        CompletableFuture<List<MessageResult>> future = new CompletableFuture<>();
+
+        CompletableFuture.runAsync(() -> {
+            try {
+                List<MessageResult> results = sendBatchMessages(contexts);
+                future.complete(results);
+            } catch (Exception e) {
+                log.error("异步批量发送消息失败", e);
+                future.complete(
+                    contexts.stream()
+                        .map(ctx -> MessageResult.failure(
+                            ctx.getChannelCode(),
+                            ctx.getReceiver(),
+                            "ASYNC_BATCH_SEND_ERROR",
+                            e.getMessage()
+                        ))
+                        .collect(Collectors.toList())
+                );
+            }
+        }, messageAsyncExecutor);
+
+        return future;
     }
 
     @Override

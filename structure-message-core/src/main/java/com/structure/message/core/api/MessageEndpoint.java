@@ -14,13 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-/**
- * 消息管理
- * @author chuck
- * @version 2024/07/19 下午11:40
- * @since 1.8
- */
 @Api(tags = "消息管理")
 @RestController
 @RequestMapping(value = "/api/message")
@@ -39,7 +34,6 @@ public class MessageEndpoint {
                     context.setOrgId(Long.parseLong(tenantId));
                 }
             } catch (Exception e) {
-                // 如果获取不到租户ID，使用默认值
                 context.setOrgId(1L);
             }
         }
@@ -47,11 +41,35 @@ public class MessageEndpoint {
         return ResultUtilSimpleImpl.success(messageResult);
     }
 
+    @ApiOperation(value = "异步发送单条消息")
+    @PostMapping(value = "/send/async")
+    public ResResultVO<CompletableFuture<MessageResult>> sendAsync(@RequestBody @Validated MessageContext context) {
+        if (context.getOrgId() == null) {
+            try {
+                String tenantId = TenantContextHolder.getTenantId();
+                if (tenantId != null) {
+                    context.setOrgId(Long.parseLong(tenantId));
+                }
+            } catch (Exception e) {
+                context.setOrgId(1L);
+            }
+        }
+        CompletableFuture<MessageResult> futureResult = service.sendMessageAsync(context);
+        return ResultUtilSimpleImpl.success(futureResult);
+    }
+
     @ApiOperation(value = "批量发送消息")
     @PostMapping(value = "/send/batch")
     public ResResultVO<List<MessageResult>> sendBatch(@RequestBody @Validated List<MessageContext> contexts) {
         List<MessageResult> messageResults = service.sendBatchMessages(contexts);
         return ResultUtilSimpleImpl.success(messageResults);
+    }
+
+    @ApiOperation(value = "异步批量发送消息")
+    @PostMapping(value = "/send/batch/async")
+    public ResResultVO<CompletableFuture<List<MessageResult>>> sendBatchAsync(@RequestBody @Validated List<MessageContext> contexts) {
+        CompletableFuture<List<MessageResult>> futureResults = service.sendBatchMessagesAsync(contexts);
+        return ResultUtilSimpleImpl.success(futureResults);
     }
 
     @ApiOperation(value = "重新发送消息")
