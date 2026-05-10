@@ -1,0 +1,136 @@
+# 消息中心配置文件
+server:
+  port: 8080
+
+spring:
+  main:
+    allow-circular-references:  true
+  application:
+    name: message-center
+  # 数据源配置
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://172.24.20.15:3306/message_center?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: MessageCenterHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+  # Redis配置
+  redis:
+    host: 172.24.20.15
+    port: 6379
+    password: 123456
+    database: 0
+    timeout: 5000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
+
+  # 邮件配置
+  mail:
+    host: smtp.example.com
+    port: 587
+    username: your-email@example.com
+    password: your-password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# 健康检查配置
+management:
+  health:
+    mail:
+      enabled: false  # 禁用默认的邮件健康检查，因为我们使用插件化的邮件发送
+
+# MyBatis Plus配置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+    jdbc-type-for-null: 'null'
+  global-config:
+    db-config:
+      id-type: AUTO
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  mapper-locations: classpath*:mapper/**/*.xml
+
+# Structure配置
+structure:
+  log:
+    aop:
+      enable: true
+      expression: execution(public * com.structure.message.core.api..*Controller.*(..))
+  jwt:
+    secret: 12345646xsdfsdfsdfsdfsdfsdfsdfsfsdf
+    antMatchers:
+      unAuthenticated:
+        # 不经过身份验证的接口
+        - /**
+        - /advertising/callback/adpopcorn
+        - /api/user/login
+        - /doc.html
+        - /webjars/**
+        - /swagger-ui.html
+        - /swagger-resources/**
+        - /v2/api-docs/**
+        - /api/files/viewImg/**
+
+# 消息中心配置
+message:
+  center:
+    # 插件配置
+    plugin:
+      enabled: true
+      scan-packages:
+        - com.structure.message.plugin
+    # 异步发送配置
+    async:
+      enabled: true
+      core-pool-size: 10
+      max-pool-size: 50
+      queue-capacity: 1000
+      thread-name-prefix: MessageSender-
+    # 重试配置
+    retry:
+      enabled: true
+      max-times: 3
+      delay-millis: 5000
+
+# Swagger配置
+swagger:
+  enabled: true
+  title: 消息中心API文档
+  description: 基于插件化架构的消息中心系统
+  version: 1.0.0
+  contact:
+    name: Message Center Team
+    email: support@example.com
+  base-package: com.structure.message.core.api
+
+# 日志配置
+logging:
+  level:
+    com.structure.message: DEBUG
+    org.springframework.web: INFO
+    com.baomidou.mybatisplus: DEBUG
+  pattern:
+    console: '%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx'
+    file: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %5level %logger{50} - %msg%n'
