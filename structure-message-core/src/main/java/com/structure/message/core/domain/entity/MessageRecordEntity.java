@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
  * 消息记录实体
  */
 @Data
-@TableName("mc_message_record")
+@TableName("message_record")
 public class MessageRecordEntity {
 
     /**

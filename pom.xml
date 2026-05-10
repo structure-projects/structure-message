@@ -31,7 +31,7 @@
     <modules>
         <module>structure-message-common</module>
         <module>structure-message-core</module>
-        <module>structure-message-boot</module>
+<!--        <module>structure-message-boot</module>-->
         <module>structure-message-plugins</module>
         <module>structure-message-sms-provider</module>
     </modules>

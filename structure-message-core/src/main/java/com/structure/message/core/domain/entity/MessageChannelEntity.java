@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
  * 消息通道实体
  */
 @Data
-@TableName("mc_channel")
+@TableName("channel")
 public class MessageChannelEntity {
 
     /**

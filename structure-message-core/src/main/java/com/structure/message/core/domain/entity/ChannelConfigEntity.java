@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
  * 组织通道配置实体
  */
 @Data
-@TableName("mc_org_channel_config")
+@TableName("org_channel_config")
 public class ChannelConfigEntity {
 
     /**
