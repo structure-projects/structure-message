@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.structured</groupId>
         <artifactId>structure-message</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <packaging>pom</packaging>

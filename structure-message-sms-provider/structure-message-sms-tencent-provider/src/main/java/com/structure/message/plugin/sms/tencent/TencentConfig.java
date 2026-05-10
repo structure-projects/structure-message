@@ -1,4 +1,4 @@
-package com.structure.message.plugin.sms.aliyun;
+package com.structure.message.plugin.sms.tencent;
 
 import lombok.Data;
 
