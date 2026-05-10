@@ -44,12 +44,6 @@ public class SmsMessagePlugin extends AbstractMessageChannelPlugin {
     protected void doInitialize(MessageChannelConfig config) throws Exception {
         log.info("初始化短信消息插件");
 
-        // 验证必要的配置
-        String provider = config.getConfig("provider");
-        if (provider == null || provider.trim().isEmpty()) {
-            throw new MessageException("SMS_CONFIG_ERROR", "短信服务提供商未配置");
-        }
-
         // 支持多种配置格式
         String accessKey = config.getConfig("accessKey");
         if (accessKey == null) {
@@ -59,31 +53,23 @@ public class SmsMessagePlugin extends AbstractMessageChannelPlugin {
         if (secretKey == null) {
             secretKey = config.getConfig("accessKeySecret");
         }
-        // 腾讯云配置
         String secretId = config.getConfig("secretId");
-        
         String signName = config.getConfig("signName");
 
-        // 根据提供商类型验证配置
-        if ("aliyun".equalsIgnoreCase(provider)) {
-            if (accessKey == null || secretKey == null || signName == null) {
-                throw new MessageException("SMS_CONFIG_ERROR", "阿里云短信服务配置不完整");
-            }
-        } else if ("tencent".equalsIgnoreCase(provider)) {
-            if (secretId == null || secretKey == null || signName == null) {
-                throw new MessageException("SMS_CONFIG_ERROR", "腾讯云短信服务配置不完整");
-            }
-        } else if ("huawei".equalsIgnoreCase(provider)) {
-            if (accessKey == null || secretKey == null || signName == null) {
-                throw new MessageException("SMS_CONFIG_ERROR", "华为云短信服务配置不完整");
-            }
-        }
+        String defaultProvider = config.getConfig("provider", "aliyun");
 
-        // 初始化短信服务提供商
-        SmsProvider smsProvider = smsProviderFactory.createProvider(provider, config);
+        // 初始化所有可用的短信提供商
+        smsProviderFactory.initializeAllProviders(config);
+
+        // 设置默认提供商
+        SmsProvider smsProvider = smsProviderFactory.getInitializedProvider(defaultProvider);
+        if (smsProvider == null) {
+            throw new MessageException("SMS_CONFIG_ERROR", "默认短信服务提供商初始化失败：" + defaultProvider);
+        }
         smsProviderFactory.setCurrentProvider(smsProvider);
 
-        log.info("短信消息插件初始化成功，提供商：{}", provider);
+        log.info("短信消息插件初始化成功，默认提供商：{}，可用提供商：{}", defaultProvider, 
+                smsProviderFactory.getSupportedProviders().keySet());
     }
 
     @Override
@@ -92,8 +78,22 @@ public class SmsMessagePlugin extends AbstractMessageChannelPlugin {
                 context.getContent() != null ? context.getContent().length() : 0);
 
         try {
-            // 获取短信服务提供商
-            SmsProvider smsProvider = smsProviderFactory.getCurrentProvider();
+            // 优先从上下文中获取短信服务提供商
+            SmsProvider smsProvider;
+            String providerFromContext = context.getProvider();
+            
+            if (providerFromContext != null && !providerFromContext.trim().isEmpty()) {
+                smsProvider = smsProviderFactory.getInitializedProvider(providerFromContext);
+                if (smsProvider == null) {
+                    log.warn("上下文中指定的短信提供商不可用：{}，将使用默认提供商", providerFromContext);
+                    smsProvider = smsProviderFactory.getCurrentProvider();
+                } else {
+                    log.info("使用上下文中指定的短信提供商：{}", providerFromContext);
+                }
+            } else {
+                smsProvider = smsProviderFactory.getCurrentProvider();
+            }
+
             if (smsProvider == null) {
                 throw new MessageException("SMS_PROVIDER_NOT_FOUND", "短信服务提供商未初始化");
             }

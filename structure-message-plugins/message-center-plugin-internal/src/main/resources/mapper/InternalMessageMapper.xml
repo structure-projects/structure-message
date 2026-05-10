@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.structure.message.plugin.internal.mapper.InternalMessageMapper">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO internal_message (
+            org_id, receiver, title, content, business_id, 
+            priority, is_read, create_time, read_time
+        ) VALUES (
+            #{orgId}, #{receiver}, #{title}, #{content}, #{businessId},
+            #{priority}, #{isRead}, #{createTime}, #{readTime}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE internal_message SET
+            org_id = #{orgId},
+            receiver = #{receiver},
+            title = #{title},
+            content = #{content},
+            business_id = #{businessId},
+            priority = #{priority},
+            is_read = #{isRead},
+            create_time = #{createTime},
+            read_time = #{readTime}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM internal_message WHERE id = #{id}
+    </delete>
+
+    <select id="selectById" resultType="com.structure.message.plugin.internal.InternalMessageDTO">
+        SELECT
+            id, org_id as orgId, receiver, title, content,
+            business_id as businessId, priority, is_read as isRead,
+            create_time as createTime, read_time as readTime
+        FROM internal_message WHERE id = #{id}
+    </select>
+
+    <select id="selectByUser" resultType="com.structure.message.plugin.internal.InternalMessageDTO">
+        SELECT
+            id, org_id as orgId, receiver, title, content,
+            business_id as businessId, priority, is_read as isRead,
+            create_time as createTime, read_time as readTime
+        FROM internal_message
+        WHERE receiver = #{userId} AND org_id = #{orgId}
+        <if test="isRead != null">
+            AND is_read = #{isRead}
+        </if>
+        ORDER BY create_time DESC
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
+    </select>
+
+    <select id="countUnread" resultType="long">
+        SELECT COUNT(*) FROM internal_message
+        WHERE receiver = #{userId} AND org_id = #{orgId} AND is_read = FALSE
+    </select>
+
+    <update id="batchMarkAsRead">
+        UPDATE internal_message SET
+            is_read = TRUE,
+            read_time = NOW()
+        WHERE id IN
+        <foreach collection="messageIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

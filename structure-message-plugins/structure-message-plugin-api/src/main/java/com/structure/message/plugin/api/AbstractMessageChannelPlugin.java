@@ -151,8 +151,13 @@ public abstract class AbstractMessageChannelPlugin implements MessageChannelPlug
      * 创建成功的消息结果
      */
     protected MessageResult createSuccessResult(MessageContext context, Object responseData) {
+        Long messageId = null;
+        if (responseData instanceof Long) {
+            messageId = (Long) responseData;
+        }
         return MessageResult.builder()
                 .success(true)
+                .messageId(messageId)
                 .channelCode(getChannelCode())
                 .receiver(context.getReceiver())
                 .responseData(responseData)

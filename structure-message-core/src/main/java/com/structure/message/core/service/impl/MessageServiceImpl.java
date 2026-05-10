@@ -7,17 +7,17 @@ import com.structure.message.common.constant.MessageConstants;
 import com.structure.message.common.exception.MessageException;
 import com.structure.message.common.model.MessageContext;
 import com.structure.message.common.model.MessageResult;
+import com.structure.message.common.plugin.MessageChannelPlugin;
+import com.structure.message.core.domain.entity.MessageChannelEntity;
 import com.structure.message.core.domain.entity.MessageRecordEntity;
 import com.structure.message.core.mapper.MessageRecordMapper;
-import com.structure.message.common.plugin.MessageChannelPlugin;
 import com.structure.message.core.plugin.PluginManager;
+import com.structure.message.core.service.MessageChannelService;
 import com.structure.message.core.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +35,7 @@ public class MessageServiceImpl implements MessageService {
 
     private final PluginManager pluginManager;
     private final MessageRecordMapper messageRecordMapper;
+    private final MessageChannelService messageChannelService;
 
     @Autowired
     @Qualifier("messageAsyncExecutor")
@@ -198,20 +199,43 @@ public class MessageServiceImpl implements MessageService {
     public List<MessageResult> queryMessageRecords(String businessId, String channelCode, Integer status) {
         LambdaQueryWrapper<MessageRecordEntity> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(businessId != null, MessageRecordEntity::getBusinessId, businessId)
-               .eq(channelCode != null, MessageRecordEntity::getChannelCode, channelCode)
                .eq(status != null, MessageRecordEntity::getStatus, status)
                .orderByDesc(MessageRecordEntity::getCreateTime);
 
         List<MessageRecordEntity> records = messageRecordMapper.selectList(wrapper);
+        
+        // 如果指定了channelCode，需要先获取对应的channelId，再过滤结果
+        if (channelCode != null) {
+            MessageChannelEntity channel = messageChannelService.lambdaQuery()
+                    .eq(MessageChannelEntity::getChannelCode, channelCode)
+                    .one();
+            if (channel != null) {
+                records = records.stream()
+                        .filter(r -> channel.getId().equals(r.getChannelId()))
+                        .collect(Collectors.toList());
+            } else {
+                records = new ArrayList<>();
+            }
+        }
 
         return records.stream()
-                .map(record -> MessageResult.builder()
-                        .success(MessageConstants.MessageStatus.SUCCESS == record.getStatus())
-                        .messageId(record.getId())
-                        .channelCode(record.getChannelCode())
-                        .receiver(record.getReceiver())
-                        .errorMsg(record.getErrorMsg())
-                        .build())
+                .map(record -> {
+                    // 通过channelId查找对应的channelCode
+                    String resolvedChannelCode = null;
+                    if (record.getChannelId() != null) {
+                        MessageChannelEntity channel = messageChannelService.getById(record.getChannelId());
+                        if (channel != null) {
+                            resolvedChannelCode = channel.getChannelCode();
+                        }
+                    }
+                    return MessageResult.builder()
+                            .success(MessageConstants.MessageStatus.SUCCESS == record.getStatus())
+                            .messageId(record.getId())
+                            .channelCode(resolvedChannelCode)
+                            .receiver(record.getReceiver())
+                            .errorMsg(record.getErrorMsg())
+                            .build();
+                })
                 .collect(Collectors.toList());
     }
 
@@ -222,10 +246,19 @@ public class MessageServiceImpl implements MessageService {
             throw new MessageException("MESSAGE_NOT_FOUND", "消息记录不存在");
         }
 
+        // 通过channelId查找对应的channelCode
+        String resolvedChannelCode = null;
+        if (record.getChannelId() != null) {
+            MessageChannelEntity channel = messageChannelService.getById(record.getChannelId());
+            if (channel != null) {
+                resolvedChannelCode = channel.getChannelCode();
+            }
+        }
+
         return MessageResult.builder()
                 .success(MessageConstants.MessageStatus.SUCCESS == record.getStatus())
                 .messageId(record.getId())
-                .channelCode(record.getChannelCode())
+                .channelCode(resolvedChannelCode)
                 .receiver(record.getReceiver())
                 .errorMsg(record.getErrorMsg())
                 .build();

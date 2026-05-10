@@ -7,6 +7,9 @@ spring:
     allow-circular-references:  true
   application:
     name: message-center
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   # 数据源配置
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
@@ -77,7 +80,7 @@ structure:
   log:
     aop:
       enable: true
-      expression: execution(public * com.structure.message.core.api..*Controller.*(..))
+      expression: execution(public * com.structure.message.core.api..*Endpoint.*(..))
   jwt:
     secret: 12345646xsdfsdfsdfsdfsdfsdfsdfsfsdf
     antMatchers:
@@ -95,7 +98,6 @@ structure:
 
 # 消息中心配置
 message:
-  center:
   # 线程池配置
   executor:
     async:

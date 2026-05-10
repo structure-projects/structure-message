@@ -82,4 +82,9 @@ public class MessageContext implements Serializable {
      * 超时时间（毫秒）
      */
     private Long timeout = 30000L;
+
+    /**
+     *  服务提供商（可选，用于在发送时动态选择）
+     */
+    private String provider;
 }

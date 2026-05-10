@@ -66,9 +66,6 @@ public class InternalMessagePlugin extends AbstractMessageChannelPlugin {
             // 保存站内消息
             Long messageId = internalMessageService.saveMessage(message);
 
-            // 发送实时通知（如果用户在线）
-            internalMessageService.sendRealtimeNotification(message);
-
             log.info("站内消息发送成功，消息ID：{}，接收者：{}", messageId, context.getReceiver());
 
             return createSuccessResult(context, messageId);

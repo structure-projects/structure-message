@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Slf4j
 @Configuration
-@MapperScan(basePackages = {"com.structure.message.core.mapper"})
+@MapperScan(basePackages = {"com.structure.message.core.mapper", "com.structure.message.plugin.internal.mapper"})
 public class MyBatisConfiguration {
 
     private static final String TENANT_ID = "org_id";
