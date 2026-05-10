@@ -10,6 +10,7 @@ import com.structure.message.common.model.MessageResult;
 import com.structure.message.common.plugin.MessageChannelPlugin;
 import com.structure.message.core.domain.entity.MessageChannelEntity;
 import com.structure.message.core.domain.entity.MessageRecordEntity;
+import com.structure.message.core.handler.MessageEventHandler;
 import com.structure.message.core.mapper.MessageRecordMapper;
 import com.structure.message.core.plugin.PluginManager;
 import com.structure.message.core.service.MessageChannelService;
@@ -36,6 +37,7 @@ public class MessageServiceImpl implements MessageService {
     private final PluginManager pluginManager;
     private final MessageRecordMapper messageRecordMapper;
     private final MessageChannelService messageChannelService;
+    private final MessageEventHandler messageEventHandler;
 
     @Autowired
     @Qualifier("messageAsyncExecutor")
@@ -66,22 +68,40 @@ public class MessageServiceImpl implements MessageService {
             MessageRecordEntity record = saveMessageRecord(context);
 
             MessageResult result = plugin.send(context);
+            // 确保 result 有 messageId
+            result.setMessageId(record.getId());
 
             updateMessageRecord(record.getId(), result);
 
             log.info("消息发送完成，消息ID：{}，结果：{}", record.getId(), result.isSuccess());
+
+            if (result.isSuccess()) {
+                messageEventHandler.onMessageSent(context, result);
+            } else {
+                messageEventHandler.onMessageFailed(context, result.getErrorCode(), result.getErrorMsg());
+            }
+
             return result;
 
         } catch (Exception e) {
             log.error("消息发送失败，通道：{}，接收者：{}",
                     context.getChannelCode(), context.getReceiver(), e);
 
+            String errorCode;
+            String errorMsg;
+
             if (e instanceof MessageException) {
                 MessageException me = (MessageException) e;
-                saveFailedMessageRecord(context, me.getErrorCode(), me.getMessage());
+                errorCode = me.getErrorCode();
+                errorMsg = me.getMessage();
+                saveFailedMessageRecord(context, errorCode, errorMsg);
             } else {
-                saveFailedMessageRecord(context, "SYSTEM_ERROR", e.getMessage());
+                errorCode = "SYSTEM_ERROR";
+                errorMsg = e.getMessage();
+                saveFailedMessageRecord(context, errorCode, errorMsg);
             }
+
+            messageEventHandler.onMessageFailed(context, errorCode, errorMsg);
 
             throw e;
         }
