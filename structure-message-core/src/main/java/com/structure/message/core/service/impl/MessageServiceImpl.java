@@ -1,5 +1,6 @@
 package com.structure.message.core.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.structure.message.common.constant.MessageConstants;
@@ -187,7 +188,7 @@ public class MessageServiceImpl implements MessageService {
         record.setChannelId(getChannelIdByCode(context.getChannelCode()));
         record.setReceiver(context.getReceiver());
         record.setContent(context.getContent());
-        record.setParams(context.getParams() != null ? context.getParams().toString() : null);
+        record.setParams(context.getParams() != null ? JSON.toJSONString(context.getParams()) : null);
         record.setStatus(MessageConstants.MessageStatus.PENDING);
         record.setRetryTimes(context.getRetryTimes());
         record.setCreateTime(LocalDateTime.now());
@@ -204,7 +205,7 @@ public class MessageServiceImpl implements MessageService {
         record.setChannelId(getChannelIdByCode(context.getChannelCode()));
         record.setReceiver(context.getReceiver());
         record.setContent(context.getContent());
-        record.setParams(context.getParams() != null ? context.getParams().toString() : null);
+        record.setParams(context.getParams() != null ? JSON.toJSONString(context.getParams()) : null);
         record.setStatus(MessageConstants.MessageStatus.FAILED);
         record.setErrorMsg(String.format("[%s] %s", errorCode, errorMsg));
         record.setRetryTimes(context.getRetryTimes());

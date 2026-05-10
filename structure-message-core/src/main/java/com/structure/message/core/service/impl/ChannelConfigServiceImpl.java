@@ -8,11 +8,14 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.structure.message.common.constant.MessageConstants;
 import com.structure.message.common.exception.MessageException;
 import com.structure.message.core.domain.entity.ChannelConfigEntity;
+import com.structure.message.core.domain.entity.MessageChannelEntity;
 import com.structure.message.core.mapper.MessageChannelMapper;
 import com.structure.message.core.mapper.ChannelConfigMapper;
+import com.structure.message.core.plugin.PluginManager;
 import com.structure.message.core.service.ChannelConfigService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -32,6 +35,9 @@ public class ChannelConfigServiceImpl extends BaseServiceImpl<ChannelConfigMappe
 
     private final ChannelConfigMapper configMapper;
     private final MessageChannelMapper channelMapper;
+
+    @Autowired(required = false)
+    private PluginManager pluginManager;
 
     private static final String ENCRYPT_KEY = "message-center-encrypt-key-12345678";
     private final AES aes = SecureUtil.aes(ENCRYPT_KEY.getBytes());
@@ -105,6 +111,13 @@ public class ChannelConfigServiceImpl extends BaseServiceImpl<ChannelConfigMappe
     @CacheEvict(value = {"orgChannelConfigs", "orgChannelConfigMap"}, key = "#orgId + ':' + #channelId")
     public void reloadConfig(Long orgId, Long channelId) {
         log.info("重新加载组织通道配置，组织ID：{}，通道ID：{}", orgId, channelId);
+
+        // 获取通道编码
+        MessageChannelEntity channel = channelMapper.selectById(channelId);
+        if (channel != null && pluginManager != null) {
+            pluginManager.reloadPluginConfig(channel.getChannelCode(), orgId);
+        }
+
         // 缓存会自动清除，下次访问时重新加载
     }
 

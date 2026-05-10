@@ -50,12 +50,33 @@ public class SmsMessagePlugin extends AbstractMessageChannelPlugin {
             throw new MessageException("SMS_CONFIG_ERROR", "短信服务提供商未配置");
         }
 
+        // 支持多种配置格式
         String accessKey = config.getConfig("accessKey");
+        if (accessKey == null) {
+            accessKey = config.getConfig("accessKeyId");
+        }
         String secretKey = config.getConfig("secretKey");
+        if (secretKey == null) {
+            secretKey = config.getConfig("accessKeySecret");
+        }
+        // 腾讯云配置
+        String secretId = config.getConfig("secretId");
+        
         String signName = config.getConfig("signName");
 
-        if (accessKey == null || secretKey == null || signName == null) {
-            throw new MessageException("SMS_CONFIG_ERROR", "短信服务配置不完整");
+        // 根据提供商类型验证配置
+        if ("aliyun".equalsIgnoreCase(provider)) {
+            if (accessKey == null || secretKey == null || signName == null) {
+                throw new MessageException("SMS_CONFIG_ERROR", "阿里云短信服务配置不完整");
+            }
+        } else if ("tencent".equalsIgnoreCase(provider)) {
+            if (secretId == null || secretKey == null || signName == null) {
+                throw new MessageException("SMS_CONFIG_ERROR", "腾讯云短信服务配置不完整");
+            }
+        } else if ("huawei".equalsIgnoreCase(provider)) {
+            if (accessKey == null || secretKey == null || signName == null) {
+                throw new MessageException("SMS_CONFIG_ERROR", "华为云短信服务配置不完整");
+            }
         }
 
         // 初始化短信服务提供商
