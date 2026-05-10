@@ -8,6 +8,7 @@ import com.structure.message.plugin.api.AbstractMessageChannelPlugin;
 import com.structure.message.common.sms.SmsRequest;
 import com.structure.message.common.sms.SmsResponse;
 import com.structure.message.common.sms.SmsProvider;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,10 +18,13 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
+@AllArgsConstructor
 public class SmsMessagePlugin extends AbstractMessageChannelPlugin {
 
     private static final String CHANNEL_CODE = "SMS";
     private static final String CHANNEL_NAME = "短信消息";
+
+    private final SmsPluginConfig smsPluginConfig;
 
     @Autowired
     private SmsProviderFactory smsProviderFactory;
@@ -55,8 +59,8 @@ public class SmsMessagePlugin extends AbstractMessageChannelPlugin {
         }
         String secretId = config.getConfig("secretId");
         String signName = config.getConfig("signName");
-
-        String defaultProvider = config.getConfig("provider", "aliyun");
+        String defaultProviderKey = smsPluginConfig.getDefaultProvider();
+        String defaultProvider = config.getConfig("provider", defaultProviderKey);
 
         // 初始化所有可用的短信提供商
         smsProviderFactory.initializeAllProviders(config);
@@ -66,7 +70,6 @@ public class SmsMessagePlugin extends AbstractMessageChannelPlugin {
         if (smsProvider == null) {
             throw new MessageException("SMS_CONFIG_ERROR", "默认短信服务提供商初始化失败：" + defaultProvider);
         }
-        smsProviderFactory.setCurrentProvider(smsProvider);
 
         log.info("短信消息插件初始化成功，默认提供商：{}，可用提供商：{}", defaultProvider, 
                 smsProviderFactory.getSupportedProviders().keySet());
@@ -79,19 +82,16 @@ public class SmsMessagePlugin extends AbstractMessageChannelPlugin {
 
         try {
             // 优先从上下文中获取短信服务提供商
-            SmsProvider smsProvider;
+            SmsProvider smsProvider = null;
             String providerFromContext = context.getProvider();
             
             if (providerFromContext != null && !providerFromContext.trim().isEmpty()) {
                 smsProvider = smsProviderFactory.getInitializedProvider(providerFromContext);
                 if (smsProvider == null) {
-                    log.warn("上下文中指定的短信提供商不可用：{}，将使用默认提供商", providerFromContext);
-                    smsProvider = smsProviderFactory.getCurrentProvider();
-                } else {
-                    log.info("使用上下文中指定的短信提供商：{}", providerFromContext);
+                    log.warn("短信服务提供商未初始化：{}", providerFromContext);
                 }
-            } else {
-                smsProvider = smsProviderFactory.getCurrentProvider();
+            }else {
+                smsProvider = smsProviderFactory.getInitializedProvider(smsPluginConfig.getDefaultProvider());
             }
 
             if (smsProvider == null) {

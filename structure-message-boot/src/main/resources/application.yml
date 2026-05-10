@@ -135,6 +135,6 @@ logging:
     com.structure.message: DEBUG
     org.springframework.web: INFO
     com.baomidou.mybatisplus: DEBUG
-  pattern:
-    console: '%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx'
-    file: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %5level %logger{50} - %msg%n'
+#  pattern:
+#    console: '%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx'
+#    file: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %5level %logger{50} - %msg%n'

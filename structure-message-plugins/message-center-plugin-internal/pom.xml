@@ -13,6 +13,7 @@
     <artifactId>message-center-plugin-internal</artifactId>
     <name>message-center-plugin-internal</name>
     <description>站内消息插件</description>
+    <packaging>jar</packaging>
 
     <dependencies>
         <!-- 插件API -->

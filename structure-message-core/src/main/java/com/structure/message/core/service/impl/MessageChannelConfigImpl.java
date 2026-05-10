@@ -50,10 +50,4 @@ public class MessageChannelConfigImpl implements MessageChannelConfig {
     public String getChannelCode() {
         return channelCode;
     }
-
-    @Override
-    public boolean isEncrypted(String key) {
-        // 这里可以根据实际需求判断配置是否加密
-        return false;
-    }
 }

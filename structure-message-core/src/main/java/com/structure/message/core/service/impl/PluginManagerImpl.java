@@ -314,9 +314,5 @@ public class PluginManagerImpl implements PluginManager {
             return channelCode;
         }
 
-        @Override
-        public boolean isEncrypted(String key) {
-            return false;
-        }
     }
 }

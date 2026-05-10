@@ -13,6 +13,7 @@
     <artifactId>structure-message-plugin-api</artifactId>
     <name>message-center-plugin-api</name>
     <description>消息中心插件API</description>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

@@ -14,11 +14,6 @@ public interface SmsProvider {
     SmsResponse sendSms(SmsRequest request) throws Exception;
 
     /**
-     * 批量发送短信
-     */
-    SmsResponse sendBatchSms(SmsRequest request) throws Exception;
-
-    /**
      * 查询短信发送状态
      */
     SmsStatus querySmsStatus(String messageId) throws Exception;

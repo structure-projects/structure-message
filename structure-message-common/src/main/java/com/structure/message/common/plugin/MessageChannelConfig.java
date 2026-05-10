@@ -37,8 +37,4 @@ public interface MessageChannelConfig {
      */
     String getChannelCode();
 
-    /**
-     * 是否已加密
-     */
-    boolean isEncrypted(String key);
 }

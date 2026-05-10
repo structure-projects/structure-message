@@ -65,14 +65,6 @@ structure-message/
 - MySQL 5.7+
 - Redis 5.0+
 
-### 数据库初始化
-
-执行 `init_channels.sql` 文件初始化消息通道配置：
-
-```sql
-mysql -u username -p database_name < init_channels.sql
-```
-
 ### 配置说明
 
 修改 `structure-message-boot/src/main/resources/application.yml`：

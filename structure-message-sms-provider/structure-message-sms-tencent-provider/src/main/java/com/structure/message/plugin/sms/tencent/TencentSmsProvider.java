@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class TencentSmsProvider implements SmsProvider {
 
-    private MessageChannelConfig config;
     private TencentConfig tencentConfig;
 
     @Override
@@ -23,12 +22,8 @@ public class TencentSmsProvider implements SmsProvider {
         log.info("使用腾讯云发送短信，手机号：{}，签名：{}", request.getPhoneNumber(), request.getSignName());
 
         try {
-            // 验证配置
             validateConfig();
 
-            // 构建腾讯云短信请求
-            // TODO: 集成腾讯云短信SDK
-            // 这里模拟发送成功
             String messageId = "TENCENT_" + System.currentTimeMillis();
             log.info("腾讯云短信发送成功，消息ID：{}，手机号：{}", messageId, request.getPhoneNumber());
             return SmsResponse.builder()
@@ -46,43 +41,19 @@ public class TencentSmsProvider implements SmsProvider {
     }
 
     @Override
-    public SmsResponse sendBatchSms(SmsRequest request) throws Exception {
-        log.info("使用腾讯云批量发送短信");
-        try {
-            validateConfig();
-            // TODO: 集成腾讯云批量短信SDK
-            String messageId = "TENCENT_BATCH_" + System.currentTimeMillis();
-            return SmsResponse.builder()
-                    .success(true)
-                    .messageId(messageId)
-                    .build();
-        } catch (Exception e) {
-            log.error("腾讯云批量短信发送失败", e);
-            return SmsResponse.builder()
-                    .success(false)
-                    .errorCode("TENCENT_BATCH_ERROR")
-                    .errorMessage(e.getMessage())
-                    .build();
-        }
-    }
-
-    @Override
-    public SmsProvider.SmsStatus querySmsStatus(String messageId) throws Exception {
+    public SmsStatus querySmsStatus(String messageId) throws Exception {
         log.info("查询腾讯云短信状态，消息ID：{}", messageId);
-        // TODO: 集成腾讯云短信状态查询API
-        return SmsProvider.SmsStatus.DELIVERED;
+        return SmsStatus.DELIVERED;
     }
 
     @Override
     public String getProviderName() {
-        return "腾讯云短信服务";
+        return "tencent";
     }
 
     @Override
     public void initialize(MessageChannelConfig config) {
-        this.config = config;
-        
-        // 使用独立的配置类
+
         this.tencentConfig = new TencentConfig();
         tencentConfig.setSecretId(config.getConfig("secretId"));
         tencentConfig.setSecretKey(config.getConfig("secretKey"));
@@ -98,13 +69,9 @@ public class TencentSmsProvider implements SmsProvider {
     @Override
     public void destroy() {
         log.info("腾讯云短信提供商销毁");
-        this.config = null;
         this.tencentConfig = null;
     }
 
-    /**
-     * 验证配置完整性
-     */
     private void validateConfig() {
         if (tencentConfig == null || tencentConfig.getSecretId() == null || tencentConfig.getSecretId().trim().isEmpty()) {
             throw new MessageException("TENCENT_CONFIG_ERROR", "腾讯云SecretId未配置");

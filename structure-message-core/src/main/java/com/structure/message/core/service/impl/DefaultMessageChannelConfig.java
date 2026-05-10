@@ -51,9 +51,4 @@ class DefaultMessageChannelConfig implements MessageChannelConfig {
     public String getChannelCode() {
         return channelCode;
     }
-
-    @Override
-    public boolean isEncrypted(String key) {
-        return false;
-    }
 }

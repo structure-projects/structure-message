@@ -84,7 +84,7 @@ public class MessageContext implements Serializable {
     private Long timeout = 30000L;
 
     /**
-     *  服务提供商（可选，用于在发送时动态选择）
+     *  服务提供商（
      */
     private String provider;
 }
