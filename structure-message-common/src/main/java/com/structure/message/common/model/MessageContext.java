@@ -95,9 +95,9 @@ public class MessageContext implements Serializable {
     private Long timeout = 30000L;
 
     /**
-     * 服务提供商
+     * 配置名称（用于指定使用通道的哪个配置发送，不指定则使用默认配置）
      */
-    private String provider;
+    private String configName;
 
     /**
      * 消息主题

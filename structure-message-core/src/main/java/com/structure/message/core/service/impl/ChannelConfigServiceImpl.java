@@ -47,6 +47,14 @@ public class ChannelConfigServiceImpl extends BaseServiceImpl<ChannelConfigMappe
     public void saveConfig(ChannelConfigEntity config) {
         log.info("保存组织通道配置，组织ID：{}，通道ID：{}", config.getOrgId(), config.getChannelId());
 
+        if (MessageConstants.ChannelStatus.DEFAULT==(config.getIsDefault())) {
+            validateDefaultConfigUniqueness(config.getOrgId(), config.getChannelId(), config.getId());
+        }
+
+        if (config.getConfigName() != null && !config.getConfigName().isEmpty()) {
+            validateConfigNameUniqueness(config.getOrgId(), config.getChannelId(), config.getConfigName(), config.getId());
+        }
+
         config.setStatus(MessageConstants.ChannelStatus.ENABLED);
         config.setCreateTime(LocalDateTime.now());
         config.setUpdateTime(LocalDateTime.now());
@@ -54,6 +62,40 @@ public class ChannelConfigServiceImpl extends BaseServiceImpl<ChannelConfigMappe
         this.saveOrUpdate( config);
 
         log.info("组织通道配置保存成功，ID：{}", config.getId());
+    }
+
+    private void validateConfigNameUniqueness(Long orgId, Long channelId, String configName, Long excludeConfigId) {
+        LambdaQueryWrapper<ChannelConfigEntity> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(ChannelConfigEntity::getOrgId, orgId)
+               .eq(ChannelConfigEntity::getChannelId, channelId)
+               .eq(ChannelConfigEntity::getConfigName, configName)
+               .eq(ChannelConfigEntity::getStatus, MessageConstants.ChannelStatus.ENABLED);
+
+        if (excludeConfigId != null) {
+            wrapper.ne(ChannelConfigEntity::getId, excludeConfigId);
+        }
+
+        long count = configMapper.selectCount(wrapper);
+        if (count > 0) {
+            throw new MessageException("CONFIG_NAME_EXISTS", "该通道下配置名称已存在：'" + configName + "'，请使用其他名称");
+        }
+    }
+
+    private void validateDefaultConfigUniqueness(Long orgId, Long channelId, Long excludeConfigId) {
+        LambdaQueryWrapper<ChannelConfigEntity> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(ChannelConfigEntity::getOrgId, orgId)
+               .eq(ChannelConfigEntity::getChannelId, channelId)
+               .eq(ChannelConfigEntity::getIsDefault, MessageConstants.ChannelStatus.DEFAULT)
+               .eq(ChannelConfigEntity::getStatus, MessageConstants.ChannelStatus.ENABLED);
+
+        if (excludeConfigId != null) {
+            wrapper.ne(ChannelConfigEntity::getId, excludeConfigId);
+        }
+
+        long count = configMapper.selectCount(wrapper);
+        if (count > 0) {
+            throw new MessageException("DEFAULT_CONFIG_EXISTS", "该通道已存在默认配置，每个通道只能有一个默认配置");
+        }
     }
 
 
@@ -68,6 +110,38 @@ public class ChannelConfigServiceImpl extends BaseServiceImpl<ChannelConfigMappe
                .eq(ChannelConfigEntity::getStatus, MessageConstants.ChannelStatus.ENABLED);
 
        return configMapper.selectList(wrapper);
+    }
+
+    @Override
+    @Cacheable(value = "orgChannelConfigs", key = "#orgId + ':' + #channelId")
+    public List<ChannelConfigEntity> getConfigs(Long orgId, Long channelId) {
+        log.debug("获取组织指定通道的配置列表，组织ID：{}，通道ID：{}", orgId, channelId);
+
+        LambdaQueryWrapper<ChannelConfigEntity> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(ChannelConfigEntity::getOrgId, orgId)
+               .eq(ChannelConfigEntity::getChannelId, channelId)
+               .eq(ChannelConfigEntity::getStatus, MessageConstants.ChannelStatus.ENABLED);
+
+        return configMapper.selectList(wrapper);
+    }
+
+    @Override
+    @Cacheable(value = "orgChannelConfig", key = "#orgId + ':' + #channelId + ':' + #configName")
+    public ChannelConfigEntity getConfig(Long orgId, Long channelId, String configName) {
+        log.debug("获取组织指定通道的指定配置，组织ID：{}，通道ID：{}，配置名称：{}", orgId, channelId, configName);
+
+        LambdaQueryWrapper<ChannelConfigEntity> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(ChannelConfigEntity::getOrgId, orgId)
+               .eq(ChannelConfigEntity::getChannelId, channelId)
+               .eq(ChannelConfigEntity::getStatus, MessageConstants.ChannelStatus.ENABLED);
+
+        if (configName != null && !configName.isEmpty()) {
+            wrapper.eq(ChannelConfigEntity::getConfigName, configName);
+        } else {
+            wrapper.isNull(ChannelConfigEntity::getConfigName);
+        }
+
+        return configMapper.selectOne(wrapper);
     }
 
 

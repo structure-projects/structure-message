@@ -314,7 +314,7 @@ curl -X POST http://localhost:8080/api/message/send \
 | receiver | String | 是 | 接收者ID (用户ID或群聊ID) |
 | content | String | 是 | 消息内容 |
 | businessSource | String | 是 | 业务来源 |
-| provider | String | 否 | 服务提供商，不填则使用默认提供商 |
+| configName | String | 否 | 配置名称，不填则使用默认配置 |
 | subject | String | 否 | 消息标题 |
 | extra | Map | 否 | 扩展参数，如 userAccessToken |
 

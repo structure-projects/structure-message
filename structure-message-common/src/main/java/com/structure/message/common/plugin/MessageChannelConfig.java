@@ -37,4 +37,9 @@ public interface MessageChannelConfig {
      */
     String getChannelCode();
 
+    /**
+     * 获取配置名称（用于区分同一通道的多个配置）
+     */
+    String getConfigName();
+
 }

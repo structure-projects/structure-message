@@ -77,22 +77,12 @@ public class SmsMessagePlugin extends AbstractMessageChannelPlugin {
 
     @Override
     protected MessageResult doSend(MessageContext context) throws Exception {
-        log.info("发送短信消息，接收者：{}，内容长度：{}", context.getReceiver(),
-                context.getContent() != null ? context.getContent().length() : 0);
+        log.info("发送短信消息，接收者：{}，内容长度：{}，配置名称：{}", context.getReceiver(),
+                context.getContent() != null ? context.getContent().length() : 0, context.getConfigName());
 
         try {
-            // 优先从上下文中获取短信服务提供商
-            SmsProvider smsProvider = null;
-            String providerFromContext = context.getProvider();
-            
-            if (providerFromContext != null && !providerFromContext.trim().isEmpty()) {
-                smsProvider = smsProviderFactory.getInitializedProvider(providerFromContext);
-                if (smsProvider == null) {
-                    log.warn("短信服务提供商未初始化：{}", providerFromContext);
-                }
-            }else {
-                smsProvider = smsProviderFactory.getInitializedProvider(smsPluginConfig.getDefaultProvider());
-            }
+            String defaultProvider = smsPluginConfig.getDefaultProvider();
+            SmsProvider smsProvider = smsProviderFactory.getInitializedProvider(defaultProvider);
 
             if (smsProvider == null) {
                 throw new MessageException("SMS_PROVIDER_NOT_FOUND", "短信服务提供商未初始化");

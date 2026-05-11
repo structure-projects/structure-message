@@ -21,8 +21,18 @@ public class ChannelConfigDTO {
     private Long channelId;
 
     /**
+     * 配置名称（用于区分同一通道的多个配置）
+     */
+    private String configName;
+
+    /**
      * 配置值
      */
     @NotBlank(message = "配置值不能为空")
     private String configValue;
+
+    /**
+     * 是否默认配置：1-是，0-否
+     */
+    private Integer isDefault;
 }

@@ -18,7 +18,9 @@ public class OrgChannelConfigAssembler {
     public static ChannelConfigEntity assembler(ChannelConfigDTO dto) {
         ChannelConfigEntity channelConfigEntity = new ChannelConfigEntity();
         channelConfigEntity.setChannelId(dto.getChannelId());
+        channelConfigEntity.setConfigName(dto.getConfigName());
         channelConfigEntity.setConfigValue(dto.getConfigValue());
+        channelConfigEntity.setIsDefault(dto.getIsDefault());
         return channelConfigEntity;
 
     }
@@ -28,8 +30,10 @@ public class OrgChannelConfigAssembler {
         orgChannelConfigVO.setId(entity.getId());
         orgChannelConfigVO.setOrgId(entity.getOrgId());
         orgChannelConfigVO.setChannelId(entity.getChannelId());
+        orgChannelConfigVO.setConfigName(entity.getConfigName());
         orgChannelConfigVO.setConfigValue(entity.getConfigValue());
         orgChannelConfigVO.setStatus(entity.getStatus());
+        orgChannelConfigVO.setIsDefault(entity.getIsDefault());
         orgChannelConfigVO.setCreateTime(entity.getCreateTime());
         orgChannelConfigVO.setUpdateTime(entity.getUpdateTime());
         return orgChannelConfigVO;

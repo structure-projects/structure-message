@@ -22,6 +22,16 @@ public interface ChannelConfigService extends IBaseService<ChannelConfigEntity> 
     List<ChannelConfigEntity> getConfigs(Long orgId);
 
     /**
+     * 获取组织指定通道的配置列表
+     */
+    List<ChannelConfigEntity> getConfigs(Long orgId, Long channelId);
+
+    /**
+     * 获取组织指定通道的指定配置
+     */
+    ChannelConfigEntity getConfig(Long orgId, Long channelId, String configName);
+
+    /**
      * 启用组织通道配置
      */
     void enableConfig(Long configId);

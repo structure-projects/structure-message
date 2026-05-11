@@ -50,17 +50,19 @@ public class MessageServiceImpl implements MessageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public MessageResult sendMessage(MessageContext context) {
-        log.info("开始发送消息，通道：{}，接收者：{}",
-                context.getChannelCode(), context.getReceiver());
+        log.info("开始发送消息，通道：{}，接收者：{}，配置名称：{}",
+                context.getChannelCode(), context.getReceiver(), context.getConfigName());
 
         try {
             validateContext(context);
 
-            if (!pluginManager.isPluginEnabled(context.getChannelCode(), context.getOrgId())) {
-                throw new MessageException("CHANNEL_DISABLED", "消息通道已禁用");
+            String configName = context.getConfigName();
+            
+            if (!((PluginManagerImpl)pluginManager).isPluginEnabled(context.getChannelCode(), context.getOrgId(), configName)) {
+                throw new MessageException("CHANNEL_DISABLED", "消息通道已禁用或配置不存在");
             }
 
-            MessageChannelPlugin plugin = pluginManager.getPlugin(context.getChannelCode());
+            MessageChannelPlugin plugin = ((PluginManagerImpl)pluginManager).getPlugin(context.getChannelCode(), context.getOrgId(), configName);
             if (plugin == null) {
                 throw new MessageException("PLUGIN_NOT_FOUND", "插件不存在");
             }

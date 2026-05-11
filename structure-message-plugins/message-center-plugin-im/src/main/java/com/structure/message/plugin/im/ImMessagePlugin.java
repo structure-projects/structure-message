@@ -57,29 +57,29 @@ public class ImMessagePlugin extends AbstractMessageChannelPlugin {
         }
 
         log.info("IM消息插件初始化成功，默认提供商：{}，可用提供商：{}", defaultProvider,
-                imProviderFactory.getSupportedProviders().keySet());
+                imProviderFactory.getSupportedProviders().values());
     }
 
     @Override
     protected MessageResult doSend(MessageContext context) throws Exception {
-        log.info("发送IM消息，接收者：{}，内容长度：{}", context.getReceiver(),
-                context.getContent() != null ? context.getContent().length() : 0);
+        log.info("发送IM消息，接收者：{}，内容长度：{}，配置名称：{}", context.getReceiver(),
+                context.getContent() != null ? context.getContent().length() : 0, context.getConfigName());
 
         try {
-            ImProvider imProvider = null;
-            String providerFromContext = context.getProvider();
+            String providerName = imPluginConfig.getDefaultProvider();
 
-            if (providerFromContext != null && !providerFromContext.trim().isEmpty()) {
-                imProvider = imProviderFactory.getInitializedProvider(providerFromContext);
-                if (imProvider == null) {
-                    log.warn("IM服务提供商未初始化：{}", providerFromContext);
+            if (this.config != null) {
+                String configProvider = this.config.getConfig("provider");
+                if (configProvider != null && !configProvider.isEmpty()) {
+                    providerName = configProvider;
+                    log.info("使用配置指定的提供商：{}，配置名称：{}", providerName, context.getConfigName());
                 }
-            } else {
-                imProvider = imProviderFactory.getInitializedProvider(imPluginConfig.getDefaultProvider());
             }
 
+            ImProvider imProvider = imProviderFactory.getInitializedProvider(providerName);
+
             if (imProvider == null) {
-                throw new MessageException("IM_PROVIDER_NOT_FOUND", "IM服务提供商未初始化");
+                throw new MessageException("IM_PROVIDER_NOT_FOUND", "IM服务提供商未初始化：" + providerName);
             }
 
             ImRequest request = buildImRequest(context);

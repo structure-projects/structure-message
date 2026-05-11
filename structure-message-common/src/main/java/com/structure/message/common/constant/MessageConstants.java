@@ -27,6 +27,7 @@ public class MessageConstants {
     public static class ChannelStatus {
         public static final int DISABLED = 0;   // 禁用
         public static final int ENABLED = 1;    // 启用
+        public static final int DEFAULT = 1;    // 默认配置标识
     }
 
     /**

@@ -2,23 +2,21 @@ package com.structure.message.plugin.sms;
 
 import com.structure.message.common.plugin.MessageChannelConfig;
 import com.structure.message.common.sms.SmsProvider;
-import com.structure.message.plugin.sms.aliyun.AliyunSmsProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class SmsProviderFactory {
 
     private final Map<String, SmsProvider> providers;
 
-    private static final Map<String, SmsProvider> initializedProviders = new HashMap<>();
+    private final Map<String, SmsProvider> initializedProviders = new HashMap<>();
 
 
     /**

@@ -40,13 +40,20 @@ public class DingtalkImProvider implements ImProvider {
     private String botId;
     private String accessToken;
     private Long tokenExpireTime;
+    private String keyword;
 
     @Override
     public ImResponse sendImMessage(ImRequest request) throws Exception {
         String messageType = request.getMessageType();
+        String receiver = request.getReceiver();
+        
         // 如果明确指定为P2P，走点对点消息路径
         if ("P2P".equals(messageType)) {
             return sendP2PMessage(request);
+        }
+        // 如果receiver以chat_开头，使用应用机器人发群聊
+        if (receiver != null && receiver.startsWith("chat_")) {
+            return sendAppBotToChat(request);
         }
         if ("BOT".equals(messageType) || webhookUrl != null) {
             return sendBotMessage(request);
@@ -58,15 +65,20 @@ public class DingtalkImProvider implements ImProvider {
     private ImResponse sendBotMessage(ImRequest request) throws Exception {
         Map<String, Object> body = new HashMap<>();
 
+        String content = request.getContent();
+        if (keyword != null && !keyword.isEmpty() && !content.contains(keyword)) {
+            content = keyword + " - " + content;
+        }
+
         if (request.getTitle() != null && !request.getTitle().isEmpty()) {
             Map<String, Object> markdown = new HashMap<>();
             markdown.put("title", request.getTitle());
-            markdown.put("text", request.getContent());
+            markdown.put("text", content);
             body.put("msgtype", "markdown");
             body.put("markdown", markdown);
         } else {
             Map<String, Object> text = new HashMap<>();
-            text.put("content", request.getContent());
+            text.put("content", content);
             body.put("msgtype", "text");
             body.put("text", text);
         }
@@ -100,6 +112,52 @@ public class DingtalkImProvider implements ImProvider {
 
         return ImResponse.builder()
                 .success(true)
+                .rawResponse(jsonResponse)
+                .build();
+    }
+
+    private ImResponse sendAppBotToChat(ImRequest request) throws Exception {
+        String token = getAccessToken();
+
+        if (botId == null || botId.isEmpty()) {
+            return ImResponse.builder()
+                    .success(false)
+                    .errorCode("DINGTALK_CONFIG_ERROR")
+                    .errorMessage("缺少agent_id配置，请在配置中设置botId")
+                    .build();
+        }
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("chat_id", request.getReceiver());
+        
+        Map<String, Object> msg = new HashMap<>();
+        msg.put("msgtype", "text");
+        
+        Map<String, Object> text = new HashMap<>();
+        text.put("content", request.getContent());
+        msg.put("text", text);
+        
+        body.put("msg", msg);
+
+        String response = httpPost(
+                DINGTALK_API_BASE + "/topapi/chat/send?access_token=" + token,
+                body
+        );
+
+        JSONObject jsonResponse = JSON.parseObject(response);
+        int code = jsonResponse.getIntValue("errcode");
+        if (code != 0) {
+            return ImResponse.builder()
+                    .success(false)
+                    .errorCode("DINGTALK_SEND_ERROR")
+                    .errorMessage("钉钉API错误: errcode=" + code + ", errmsg=" + jsonResponse.getString("errmsg"))
+                    .rawResponse(jsonResponse)
+                    .build();
+        }
+
+        return ImResponse.builder()
+                .success(true)
+                .messageId(jsonResponse.getString("message_id"))
                 .rawResponse(jsonResponse)
                 .build();
     }
@@ -238,7 +296,8 @@ public class DingtalkImProvider implements ImProvider {
         this.webhookUrl = config.getConfig("webhookUrl");
         this.signSecret = config.getConfig("signSecret");
         this.botId = config.getConfig("botId");
-        log.info("钉钉IM服务初始化成功");
+        this.keyword = config.getConfig("keyword");
+        log.info("钉钉IM服务初始化成功，关键词配置：{}", keyword);
     }
 
 }

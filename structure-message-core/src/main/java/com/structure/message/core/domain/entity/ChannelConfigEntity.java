@@ -29,6 +29,11 @@ public class ChannelConfigEntity {
     private Long channelId;
 
     /**
+     * 配置名称（用于区分同一通道的多个配置）
+     */
+    private String configName;
+
+    /**
      * 配置值
      */
     private String configValue;
@@ -37,6 +42,11 @@ public class ChannelConfigEntity {
      * 状态：1-启用，0-禁用
      */
     private Integer status;
+
+    /**
+     * 是否默认配置：1-是，0-否
+     */
+    private Integer isDefault;
 
     /**
      * 创建时间
