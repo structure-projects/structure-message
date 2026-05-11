@@ -1,1 +1,0 @@
-package com.structure.message.plugin.sms.huawei;

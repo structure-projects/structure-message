@@ -38,13 +38,6 @@
 
         <dependency>
             <groupId>cn.structured</groupId>
-            <artifactId>structure-message-sms-huawei-provider</artifactId>
-            <version>${revision}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.structured</groupId>
             <artifactId>structure-message-sms-tencent-provider</artifactId>
             <version>${revision}</version>
             <scope>compile</scope>

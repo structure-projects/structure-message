@@ -16,7 +16,6 @@
     <modules>
         <module>structure-message-sms-aliyun-provider</module>
         <module>structure-message-sms-tencent-provider</module>
-        <module>structure-message-sms-huawei-provider</module>
     </modules>
 
 
