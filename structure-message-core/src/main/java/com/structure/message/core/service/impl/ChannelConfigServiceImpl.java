@@ -67,7 +67,6 @@ public class ChannelConfigServiceImpl extends BaseServiceImpl<ChannelConfigMappe
     private void validateConfigNameUniqueness(Long orgId, Long channelId, String configName, Long excludeConfigId) {
         LambdaQueryWrapper<ChannelConfigEntity> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(ChannelConfigEntity::getOrgId, orgId)
-               .eq(ChannelConfigEntity::getChannelId, channelId)
                .eq(ChannelConfigEntity::getConfigName, configName)
                .eq(ChannelConfigEntity::getStatus, MessageConstants.ChannelStatus.ENABLED);
 
@@ -77,7 +76,7 @@ public class ChannelConfigServiceImpl extends BaseServiceImpl<ChannelConfigMappe
 
         long count = configMapper.selectCount(wrapper);
         if (count > 0) {
-            throw new MessageException("CONFIG_NAME_EXISTS", "该通道下配置名称已存在：'" + configName + "'，请使用其他名称");
+            throw new MessageException("CONFIG_NAME_EXISTS", "该组织下配置名称已存在：'" + configName + "'，请使用其他名称");
         }
     }
 

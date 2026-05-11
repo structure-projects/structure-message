@@ -377,11 +377,15 @@ public class MessageServiceImpl implements MessageService {
     }
 
     private Long getChannelIdByCode(String channelCode) {
-        return 1L;
+        MessageChannelEntity channel = messageChannelService.lambdaQuery()
+                .eq(MessageChannelEntity::getChannelCode, channelCode)
+                .one();
+        return channel != null ? channel.getId() : 1L;
     }
 
     private String getChannelCodeById(Long channelId) {
-        return "INTERNAL";
+        MessageChannelEntity channel = messageChannelService.getById(channelId);
+        return channel != null ? channel.getChannelCode() : "UNKNOWN";
     }
 
     private void saveAccessories(Long messageId, List<MessageAccessory> accessories) {
