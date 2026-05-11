@@ -1,5 +1,6 @@
 package com.structure.message.plugin.internal.mapper;
 
+import com.structure.message.common.model.MessageAccessory;
 import com.structure.message.plugin.internal.InternalMessageDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -26,4 +27,6 @@ public interface InternalMessageMapper {
     long countUnread(@Param("userId") String userId, @Param("orgId") Long orgId);
 
     void batchMarkAsRead(@Param("messageIds") List<Long> messageIds);
+
+    List<MessageAccessory> selectAccessoriesByMessageId(@Param("messageId") Long messageId);
 }

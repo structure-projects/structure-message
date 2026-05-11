@@ -5,12 +5,15 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.structure.message.common.constant.MessageConstants;
 import com.structure.message.common.exception.MessageException;
+import com.structure.message.common.model.MessageAccessory;
 import com.structure.message.common.model.MessageContext;
 import com.structure.message.common.model.MessageResult;
 import com.structure.message.common.plugin.MessageChannelPlugin;
+import com.structure.message.core.domain.entity.MessageAccessoryEntity;
 import com.structure.message.core.domain.entity.MessageChannelEntity;
 import com.structure.message.core.domain.entity.MessageRecordEntity;
 import com.structure.message.core.handler.MessageEventHandler;
+import com.structure.message.core.mapper.MessageAccessoryMapper;
 import com.structure.message.core.mapper.MessageRecordMapper;
 import com.structure.message.core.plugin.PluginManager;
 import com.structure.message.core.service.MessageChannelService;
@@ -36,6 +39,7 @@ public class MessageServiceImpl implements MessageService {
 
     private final PluginManager pluginManager;
     private final MessageRecordMapper messageRecordMapper;
+    private final MessageAccessoryMapper messageAccessoryMapper;
     private final MessageChannelService messageChannelService;
     private final MessageEventHandler messageEventHandler;
 
@@ -66,6 +70,8 @@ public class MessageServiceImpl implements MessageService {
             }
 
             MessageRecordEntity record = saveMessageRecord(context);
+            
+            context.setMessageId(record.getId());
 
             MessageResult result = plugin.send(context);
             // 确保 result 有 messageId
@@ -202,12 +208,30 @@ public class MessageServiceImpl implements MessageService {
             throw new MessageException("MESSAGE_ALREADY_SENT", "消息已发送成功，无需重发");
         }
 
+        List<MessageAccessory> accessories = messageAccessoryMapper.selectByMessageId(messageId)
+                .stream()
+                .map(entity -> MessageAccessory.builder()
+                        .accessoryId(entity.getId())
+                        .resourceType(entity.getResourceType())
+                        .resourceId(entity.getResourceId())
+                        .resourceName(entity.getResourceName())
+                        .resourceIcon(entity.getResourceIcon())
+                        .resourceCode(entity.getResourceCode())
+                        .resourceDesc(entity.getResourceDesc())
+                        .amount(entity.getAmount())
+                        .state(entity.getState())
+                        .build())
+                .collect(Collectors.toList());
+
         MessageContext context = MessageContext.builder()
                 .orgId(record.getOrgId())
                 .businessId(record.getBusinessId())
                 .channelCode(getChannelCodeById(record.getChannelId()))
                 .receiver(record.getReceiver())
                 .content(record.getContent())
+                .subject(record.getSubject())
+                .businessSource(record.getBusinessSource())
+                .accessories(accessories.isEmpty() ? null : accessories)
                 .retryTimes(record.getRetryTimes() != null ? record.getRetryTimes() : 0)
                 .maxRetryTimes(MessageConstants.DefaultConfig.MAX_RETRY_TIMES)
                 .build();
@@ -291,6 +315,9 @@ public class MessageServiceImpl implements MessageService {
         if (context.getReceiver() == null || context.getReceiver().trim().isEmpty()) {
             throw new MessageException("INVALID_PARAM", "接收者不能为空");
         }
+        if (context.getBusinessSource() == null || context.getBusinessSource().trim().isEmpty()) {
+            throw new MessageException("INVALID_PARAM", "业务来源不能为空");
+        }
     }
 
     private MessageRecordEntity saveMessageRecord(MessageContext context) {
@@ -301,12 +328,17 @@ public class MessageServiceImpl implements MessageService {
         record.setReceiver(context.getReceiver());
         record.setContent(context.getContent());
         record.setParams(context.getParams() != null ? JSON.toJSONString(context.getParams()) : null);
+        record.setSubject(context.getSubject());
+        record.setBusinessSource(context.getBusinessSource());
         record.setStatus(MessageConstants.MessageStatus.PENDING);
         record.setRetryTimes(context.getRetryTimes());
         record.setCreateTime(LocalDateTime.now());
         record.setUpdateTime(LocalDateTime.now());
 
         messageRecordMapper.insert(record);
+
+        saveAccessories(record.getId(), context.getAccessories());
+
         return record;
     }
 
@@ -318,6 +350,8 @@ public class MessageServiceImpl implements MessageService {
         record.setReceiver(context.getReceiver());
         record.setContent(context.getContent());
         record.setParams(context.getParams() != null ? JSON.toJSONString(context.getParams()) : null);
+        record.setSubject(context.getSubject());
+        record.setBusinessSource(context.getBusinessSource());
         record.setStatus(MessageConstants.MessageStatus.FAILED);
         record.setErrorMsg(String.format("[%s] %s", errorCode, errorMsg));
         record.setRetryTimes(context.getRetryTimes());
@@ -325,6 +359,8 @@ public class MessageServiceImpl implements MessageService {
         record.setUpdateTime(LocalDateTime.now());
 
         messageRecordMapper.insert(record);
+
+        saveAccessories(record.getId(), context.getAccessories());
     }
 
     private void updateMessageRecord(Long messageId, MessageResult result) {
@@ -344,5 +380,25 @@ public class MessageServiceImpl implements MessageService {
 
     private String getChannelCodeById(Long channelId) {
         return "INTERNAL";
+    }
+
+    private void saveAccessories(Long messageId, List<MessageAccessory> accessories) {
+        if (accessories == null || accessories.isEmpty()) {
+            return;
+        }
+
+        for (MessageAccessory accessory : accessories) {
+            MessageAccessoryEntity entity = new MessageAccessoryEntity();
+            entity.setMessageId(messageId);
+            entity.setResourceType(accessory.getResourceType());
+            entity.setResourceId(accessory.getResourceId());
+            entity.setResourceName(accessory.getResourceName());
+            entity.setResourceIcon(accessory.getResourceIcon());
+            entity.setResourceCode(accessory.getResourceCode());
+            entity.setResourceDesc(accessory.getResourceDesc());
+            entity.setAmount(accessory.getAmount() != null ? accessory.getAmount() : 1L);
+            entity.setState(accessory.getState() != null ? accessory.getState() : 1);
+            messageAccessoryMapper.insert(entity);
+        }
     }
 }

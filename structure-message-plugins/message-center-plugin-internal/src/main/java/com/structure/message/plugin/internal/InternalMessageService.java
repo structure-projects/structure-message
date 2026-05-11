@@ -3,7 +3,6 @@ package com.structure.message.plugin.internal;
 import com.structure.message.plugin.internal.storage.InternalMessageStorage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,12 +13,29 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InternalMessageService {
 
-    @Qualifier("internalMessageStorage")
     private final InternalMessageStorage storage;
 
     public Long saveMessage(InternalMessageDTO message) {
-        message.setIsRead(false);
+        if (message.getType() == null) {
+            message.setType(1);
+        }
+        if (message.getChannel() == null) {
+            message.setChannel("1");
+        }
+        if (message.getState() == null) {
+            message.setState(1);
+        }
+        if (message.getIsRead() == null) {
+            message.setIsRead(false);
+        }
+        if (message.getDeleted() == null) {
+            message.setDeleted(false);
+        }
+        if (message.getPriority() == null) {
+            message.setPriority(5);
+        }
         message.setCreateTime(LocalDateTime.now());
+        message.setUpdateTime(LocalDateTime.now());
         return storage.saveMessage(message);
     }
 
@@ -36,7 +52,7 @@ public class InternalMessageService {
     }
 
     public List<InternalMessageDTO> getUserMessages(String userId, Long orgId, Boolean isRead, Integer limit) {
-        return storage.getUserMessages(userId, orgId, isRead, limit);
+        return storage.getUserMessagesWithAccessories(userId, orgId, isRead, limit);
     }
 
     public void deleteMessage(Long messageId) {

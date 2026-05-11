@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +21,11 @@ import java.util.Map;
 public class MessageContext implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 消息ID
+     */
+    private Long messageId;
 
     /**
      * 组织ID（可选）
@@ -41,6 +47,11 @@ public class MessageContext implements Serializable {
      * 模板编码
      */
     private String templateCode;
+
+    /**
+     * 发送方
+     */
+    private String sender;
 
     /**
      * 接收者
@@ -84,7 +95,23 @@ public class MessageContext implements Serializable {
     private Long timeout = 30000L;
 
     /**
-     *  服务提供商（
+     * 服务提供商
      */
     private String provider;
+
+    /**
+     * 消息主题
+     */
+    private String subject;
+
+    /**
+     * 业务来源
+     */
+    @NotBlank(message = "业务来源不能为空")
+    private String businessSource;
+
+    /**
+     * 附件列表
+     */
+    private List<MessageAccessory> accessories;
 }

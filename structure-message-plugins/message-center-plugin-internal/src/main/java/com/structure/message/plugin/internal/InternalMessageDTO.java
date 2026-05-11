@@ -1,68 +1,55 @@
 package com.structure.message.plugin.internal;
 
+import com.structure.message.common.model.MessageAccessory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-/**
- * 站内消息DTO
- */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class InternalMessageDTO {
 
-    /**
-     * 消息ID
-     */
     private Long id;
 
-    /**
-     * 组织ID
-     */
-    private Long orgId;
+    private Integer type;
 
-    /**
-     * 接收者用户ID
-     */
+    private String sender;
+
     private String receiver;
 
-    /**
-     * 消息标题
-     */
-    private String title;
+    private String subject;
 
-    /**
-     * 消息内容
-     */
     private String content;
 
-    /**
-     * 业务ID
-     */
-    private String businessId;
+    private String channel;
 
-    /**
-     * 优先级（1-10）
-     */
-    private Integer priority;
+    private Integer state;
 
-    /**
-     * 是否已读
-     */
-    private Boolean isRead;
+    private Long orgId;
 
-    /**
-     * 创建时间
-     */
     private LocalDateTime createTime;
 
-    /**
-     * 读取时间
-     */
+    private LocalDateTime updateTime;
+
+    private Long createBy;
+
+    private Long updateBy;
+
+    private Boolean deleted;
+
+    private String businessId;
+
+    private Integer priority;
+
+    private Boolean isRead;
+
     private LocalDateTime readTime;
+
+    private List<MessageAccessory> accessories;
 }

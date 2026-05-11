@@ -88,20 +88,23 @@ public class RedisInternalMessageStorage implements InternalMessageStorage {
     @Override
     public List<InternalMessageDTO> getUserMessages(String userId, Long orgId, Boolean isRead, Integer limit) {
         String userMessageKey = USER_MESSAGE_KEY_PREFIX + orgId + ":" + userId;
-        Set<Object> messageIds = redisTemplate.opsForZSet().reverseRange(userMessageKey, 0, limit != null ? limit - 1 : 49);
+        Set<Object> messageIds = redisTemplate.opsForZSet().reverseRange(userMessageKey, 0, limit != null ? limit - 1 : -1);
 
         if (messageIds == null || messageIds.isEmpty()) {
             return Collections.emptyList();
         }
 
-        List<InternalMessageDTO> result = new ArrayList<>();
-        for (Object id : messageIds) {
-            InternalMessageDTO msg = getMessageById(Long.parseLong(id.toString()));
-            if (msg != null && (isRead == null || isRead.equals(msg.getIsRead()))) {
-                result.add(msg);
+        List<InternalMessageDTO> messages = new ArrayList<>();
+        for (Object idObj : messageIds) {
+            Long messageId = Long.parseLong(idObj.toString());
+            InternalMessageDTO message = getMessageById(messageId);
+            if (message != null) {
+                if (isRead == null || isRead.equals(message.getIsRead())) {
+                    messages.add(message);
+                }
             }
         }
-        return result;
+        return messages;
     }
 
     @Override

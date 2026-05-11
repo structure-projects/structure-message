@@ -53,17 +53,24 @@ public class InternalMessagePlugin extends AbstractMessageChannelPlugin {
         log.info("发送站内消息，接收者：{}，内容：{}", context.getReceiver(), context.getContent());
 
         try {
-            // 构建站内消息
+            String title = context.getParams() != null ? (String) context.getParams().get("title") : null;
+            
             InternalMessageDTO message = InternalMessageDTO.builder()
-                    .orgId(context.getOrgId())
+                    .id(context.getMessageId())
+                    .type(1)
+                    .sender(context.getSender())
                     .receiver(context.getReceiver())
-                    .title(context.getParams() != null ? (String) context.getParams().get("title") : "系统消息")
+                    .subject(title != null ? title : context.getSubject())
                     .content(context.getContent())
+                    .channel("1")
+                    .state(1)
+                    .orgId(context.getOrgId())
                     .businessId(context.getBusinessId())
-                    .priority(context.getPriority())
+                    .priority(context.getPriority() != null ? context.getPriority() : 5)
+                    .deleted(false)
+                    .accessories(context.getAccessories())
                     .build();
 
-            // 保存站内消息
             Long messageId = internalMessageService.saveMessage(message);
 
             log.info("站内消息发送成功，消息ID：{}，接收者：{}", messageId, context.getReceiver());

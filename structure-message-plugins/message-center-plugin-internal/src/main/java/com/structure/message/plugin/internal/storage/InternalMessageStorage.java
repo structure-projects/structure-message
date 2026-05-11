@@ -16,6 +16,10 @@ public interface InternalMessageStorage {
 
     List<InternalMessageDTO> getUserMessages(String userId, Long orgId, Boolean isRead, Integer limit);
 
+    default List<InternalMessageDTO> getUserMessagesWithAccessories(String userId, Long orgId, Boolean isRead, Integer limit) {
+        return getUserMessages(userId, orgId, isRead, limit);
+    }
+
     long getUnreadMessageCount(String userId, Long orgId);
 
     void markAsRead(Long messageId);

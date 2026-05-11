@@ -1,5 +1,6 @@
 package com.structure.message.plugin.internal.storage;
 
+import com.structure.message.common.model.MessageAccessory;
 import com.structure.message.plugin.internal.InternalMessageDTO;
 import com.structure.message.plugin.internal.mapper.InternalMessageMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +18,7 @@ public class MyBatisInternalMessageStorage implements InternalMessageStorage {
 
     @Override
     public Long saveMessage(InternalMessageDTO message) {
-        if (message.getId() == null) {
-            internalMessageMapper.insert(message);
-        } else {
-            internalMessageMapper.update(message);
-        }
+        internalMessageMapper.insert(message);
         log.info("站内消息已保存到数据库，消息ID：{}", message.getId());
         return message.getId();
     }
@@ -45,6 +42,18 @@ public class MyBatisInternalMessageStorage implements InternalMessageStorage {
     @Override
     public List<InternalMessageDTO> getUserMessages(String userId, Long orgId, Boolean isRead, Integer limit) {
         return internalMessageMapper.selectByUser(userId, orgId, isRead, limit);
+    }
+
+    @Override
+    public List<InternalMessageDTO> getUserMessagesWithAccessories(String userId, Long orgId, Boolean isRead, Integer limit) {
+        List<InternalMessageDTO> messages = internalMessageMapper.selectByUser(userId, orgId, isRead, limit);
+        for (InternalMessageDTO message : messages) {
+            List<MessageAccessory> accessories = internalMessageMapper.selectAccessoriesByMessageId(message.getId());
+            if (accessories != null && !accessories.isEmpty()) {
+                message.setAccessories(accessories);
+            }
+        }
+        return messages;
     }
 
     @Override

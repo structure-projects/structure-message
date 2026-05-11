@@ -58,6 +58,16 @@ public class MessageRecordEntity {
     private String params;
 
     /**
+     * 附件主题
+     */
+    private String subject;
+
+    /**
+     * 业务来源
+     */
+    private String businessSource;
+
+    /**
      * 状态：0-待发送，1-发送中，2-成功，3-失败
      */
     private Integer status;
