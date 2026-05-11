@@ -19,7 +19,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 /**
  * 通道配置管理
@@ -40,7 +39,18 @@ public class MessageChannelConfigEndpoint {
     @PostMapping(value = "/")
     public ResResultVO<Long> save(@RequestBody @Validated ChannelConfigDTO create) {
         ChannelConfigEntity config = OrgChannelConfigAssembler.assembler(create);
-        service.saveConfig(config);
+        service.save(config);
+        return ResultUtilSimpleImpl.success(config.getId());
+    }
+
+    @ApiOperation(value = "修改配置")
+    @PutMapping(value = "/{id}")
+    public ResResultVO<Long> update(@RequestBody @Validated ChannelConfigDTO create,
+                                    @ApiParam(value = "配置ID", example = "1", required = true)
+                                    @PathVariable(value = "id") Long id) {
+        ChannelConfigEntity config = OrgChannelConfigAssembler.assembler(create);
+        config.setId(id);
+        service.updateById(config);
         return ResultUtilSimpleImpl.success(config.getId());
     }
 

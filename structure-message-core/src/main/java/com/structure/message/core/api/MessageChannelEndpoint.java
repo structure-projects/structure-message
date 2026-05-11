@@ -19,6 +19,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Api(tags = "消息通道管理")
 @RestController
 @RequestMapping(value = "/api/message-channel")
@@ -80,5 +83,20 @@ public class MessageChannelEndpoint {
         ResPage<MessageChannelVO> resPage = ResPageConvert.convert(pageResult, MessageChannelAssembler::assembler);
 
         return ResultUtilSimpleImpl.success(resPage);
+    }
+
+    @ApiOperation("下拉列表")
+    @GetMapping("/option")
+    public ResResultVO<List<MessageChannelVO>> option() {
+        List<MessageChannelEntity> list = messageChannelService.list(Wrappers.<MessageChannelEntity>lambdaQuery()
+                .eq(MessageChannelEntity::getStatus, 1)
+                .select(
+                        MessageChannelEntity::getId,
+                        MessageChannelEntity::getChannelCode,
+                        MessageChannelEntity::getChannelName,
+                        MessageChannelEntity::getChannelType
+                ));
+        List<MessageChannelVO> result = list.stream().map(MessageChannelAssembler::assembler).collect(Collectors.toList());
+        return ResultUtilSimpleImpl.success(result);
     }
 }

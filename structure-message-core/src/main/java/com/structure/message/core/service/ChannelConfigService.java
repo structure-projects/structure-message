@@ -12,11 +12,6 @@ import java.util.Map;
 public interface ChannelConfigService extends IBaseService<ChannelConfigEntity> {
 
     /**
-     * 保存组织通道配置
-     */
-    void saveConfig(ChannelConfigEntity config);
-
-    /**
      * 获取组织通道所有配置
      */
     List<ChannelConfigEntity> getConfigs(Long orgId);

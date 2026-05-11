@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 public class ChannelConfigDTO {
-
     /**
      * 通道ID
      */
