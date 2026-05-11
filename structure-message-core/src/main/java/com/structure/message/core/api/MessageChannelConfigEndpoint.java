@@ -106,4 +106,11 @@ public class MessageChannelConfigEndpoint {
         return ResultUtilSimpleImpl.success(null);
     }
 
+    @ApiOperation(value = "删除配置")
+    @DeleteMapping(value = "/{id}")
+    public ResResultVO<Void> delete(@ApiParam(value = "配置ID", example = "1") @PathVariable("id") Long id) {
+        service.removeById(id);
+        return ResultUtilSimpleImpl.success(null);
+    }
+
 }
