@@ -2,6 +2,7 @@ package com.structure.message.core.service.impl;
 
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.symmetric.AES;
+import cn.structure.starter.tenant.TenantContextHolder;
 import cn.structured.mybatis.plus.starter.base.BaseServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -46,13 +47,22 @@ public class ChannelConfigServiceImpl extends BaseServiceImpl<ChannelConfigMappe
     public boolean save(ChannelConfigEntity entity) {
         log.info("保存组织通道配置，组织ID：{}，通道ID：{}", entity.getOrgId(), entity.getChannelId());
 
+        long orgId = 1L;
+        try {
+            String tenantId = TenantContextHolder.getTenantId();
+            orgId = Long.parseLong(tenantId);
+        }catch (Exception e){
+            log.warn("获取当前租户ID失败");
+        }
+
+
         // 验证是否为默认配置
         if (MessageConstants.ChannelStatus.DEFAULT == (entity.getIsDefault())) {
-            clearDefaultConfig(entity.getOrgId(), entity.getChannelId());
+            clearDefaultConfig(orgId, entity.getChannelId());
         }
 
         // 验证配置名称唯一性
-        validateConfigNameUniqueness(entity.getOrgId(), entity.getConfigName());
+        validateConfigNameUniqueness(orgId, entity.getConfigName());
 
         entity.setStatus(MessageConstants.ChannelStatus.ENABLED);
         entity.setCreateTime(LocalDateTime.now());
@@ -66,12 +76,19 @@ public class ChannelConfigServiceImpl extends BaseServiceImpl<ChannelConfigMappe
 
     @Override
     public boolean updateById(ChannelConfigEntity entity) {
+        long orgId = 1L;
+        try {
+            String tenantId = TenantContextHolder.getTenantId();
+            orgId = Long.parseLong(tenantId);
+        }catch (Exception e){
+            log.warn("获取当前租户ID失败");
+        }
 
         // 配置名称不允许修改
         entity.setConfigName(null);
 
         if (MessageConstants.ChannelStatus.DEFAULT == (entity.getIsDefault())) {
-            clearDefaultConfig(entity.getOrgId(), entity.getChannelId());
+            clearDefaultConfig(orgId, entity.getChannelId());
         }
 
         return super.updateById(entity);
@@ -104,8 +121,7 @@ public class ChannelConfigServiceImpl extends BaseServiceImpl<ChannelConfigMappe
     private void clearDefaultConfig(Long orgId, Long channelId) {
         LambdaQueryWrapper<ChannelConfigEntity> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(ChannelConfigEntity::getOrgId, orgId)
-               .eq(ChannelConfigEntity::getChannelId, channelId)
-               .eq(ChannelConfigEntity::getStatus, MessageConstants.ChannelStatus.ENABLED);
+               .eq(ChannelConfigEntity::getChannelId, channelId);
 
         ChannelConfigEntity unDefaultConfig = new ChannelConfigEntity() ;
         unDefaultConfig.setIsDefault(0);
