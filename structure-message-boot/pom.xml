@@ -95,6 +95,35 @@
             <version>${structure-message.version}</version>
         </dependency>
 
+        <!-- IM插件模块 -->
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>message-center-plugin-im</artifactId>
+            <version>${structure-message.version}</version>
+        </dependency>
+
+        <!-- IM服务提供商 -->
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>structure-message-im-feishu-provider</artifactId>
+            <version>${structure-message.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>structure-message-im-dingtalk-provider</artifactId>
+            <version>${structure-message.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>structure-message-im-wechatwork-provider</artifactId>
+            <version>${structure-message.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>structure-message-im-netease-provider</artifactId>
+            <version>${structure-message.version}</version>
+        </dependency>
+
         <!-- 插件API（用于扩展存储实现） -->
         <dependency>
             <groupId>cn.structured</groupId>

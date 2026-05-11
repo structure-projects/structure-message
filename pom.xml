@@ -6,17 +6,16 @@
 
     <parent>
         <groupId>cn.structured</groupId>
-        <artifactId>structure-dependencies</artifactId>
+        <artifactId>structure-boot-parent</artifactId>
         <version>1.2.10</version>
-        <relativePath/>
     </parent>
 
+    <groupId>cn.structured</groupId>
     <artifactId>structure-message</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>
-
-    <name>message-center</name>
-    <description>Structure Message Center - 消息中心系统</description>
+    <name>structure-message</name>
+    <description>structure-message消息中心系统</description>
 
     <properties>
         <revision>1.0.1-SNAPSHOT</revision>
@@ -25,7 +24,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot.version>2.7.18</spring-boot.version>
         <structure.version>1.2.10</structure.version>
-        <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
     </properties>
 
     <modules>
@@ -33,69 +31,83 @@
         <module>structure-message-core</module>
         <module>structure-message-plugins</module>
         <module>structure-message-sms-provider</module>
+        <module>structure-message-im-provider</module>
+        <module>structure-message-boot</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
-            <!-- Spring Boot -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-parent</artifactId>
-                <version>${spring-boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <!-- Structure Boot -->
-            <dependency>
-                <groupId>cn.structured</groupId>
-                <artifactId>structure-boot-parent</artifactId>
-                <version>${structure.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <!-- 内部模块依赖 -->
             <dependency>
                 <groupId>cn.structured</groupId>
                 <artifactId>structure-message-common</artifactId>
-                <version>${project.version}</version>
+                <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>cn.structured</groupId>
                 <artifactId>structure-message-core</artifactId>
-                <version>${project.version}</version>
+                <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>cn.structured</groupId>
                 <artifactId>structure-message-plugin-api</artifactId>
-                <version>${project.version}</version>
+                <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>cn.structured</groupId>
-                <artifactId>message-center-plugin-email</artifactId>
-                <version>${project.version}</version>
+                <artifactId>message-center-plugin-internal</artifactId>
+                <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>cn.structured</groupId>
                 <artifactId>message-center-plugin-sms</artifactId>
-                <version>${project.version}</version>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>message-center-plugin-email</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>message-center-plugin-im</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-message-sms-aliyun-provider</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-message-sms-tencent-provider</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-message-sms-huawei-provider</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-message-im-feishu-provider</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-message-im-dingtalk-provider</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-message-im-wechatwork-provider</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-message-im-netease-provider</artifactId>
+                <version>${revision}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

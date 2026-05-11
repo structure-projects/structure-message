@@ -21,6 +21,7 @@
         <module>message-center-plugin-internal</module>
         <module>message-center-plugin-sms</module>
         <module>message-center-plugin-email</module>
+        <module>message-center-plugin-im</module>
     </modules>
 
     <dependencies>

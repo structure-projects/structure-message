@@ -64,7 +64,10 @@ public interface MessageChannelPlugin {
         SMS("短信消息"),
         EMAIL("邮件消息"),
         WECHAT("微信消息"),
-        DINGTALK("钉钉消息");
+        DINGTALK("钉钉消息"),
+        FEISHU("飞书消息"),
+        WECHAT_WORK("企业微信消息"),
+        NETEASE_IM("网易云信消息");
 
         private final String description;
 
