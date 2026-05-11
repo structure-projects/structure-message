@@ -104,6 +104,11 @@
             </dependency>
             <dependency>
                 <groupId>cn.structured</groupId>
+                <artifactId>structure-message-im-wechat-provider</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
                 <artifactId>structure-message-im-netease-provider</artifactId>
                 <version>${revision}</version>
             </dependency>

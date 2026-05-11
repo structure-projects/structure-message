@@ -17,6 +17,7 @@
         <module>structure-message-im-feishu-provider</module>
         <module>structure-message-im-dingtalk-provider</module>
         <module>structure-message-im-wechatwork-provider</module>
+        <module>structure-message-im-wechat-provider</module>
         <module>structure-message-im-netease-provider</module>
     </modules>
 

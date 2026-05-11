@@ -12,7 +12,7 @@
 
     <artifactId>message-center-plugin-im</artifactId>
     <name>message-center-plugin-im</name>
-    <description>IM消息插件 - 支持飞书、钉钉、企业微信、云信等</description>
+    <description>IM消息插件 - 支持飞书、钉钉、企业微信、微信通知、云信等</description>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -65,6 +65,10 @@
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>structure-message-im-wechatwork-provider</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>structure-message-im-wechat-provider</artifactId>
         </dependency>
         <dependency>
             <groupId>cn.structured</groupId>
