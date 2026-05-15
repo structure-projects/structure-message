@@ -180,6 +180,7 @@
     </dependencyManagement>
 
     <build>
+        <finalName>structure-message-center</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

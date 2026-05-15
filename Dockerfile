@@ -1,6 +1,5 @@
 FROM eclipse-temurin:8-jdk-alpine
-ADD ./structure-user-boot/target/user-center.jar /app/boot/app.jar
-ADD ./structure-user-cloud/target/user-center.jar /app/cloud/app.jar
+ADD ./structure-message-boot/target/structure-message-center.jar /app/boot/app.jar
 ADD liveness.sh /app/liveness.sh
 ENV PARAMS=""
 ENV JAVA_OPTS=""
