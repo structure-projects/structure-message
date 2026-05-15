@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  user-center:
+    image: registry.cn-hangzhou.aliyuncs.com/structured/structured-message-center:latest
+    restart: always
+    env_file:
+      - .env
+    hostname: user-center #服务内不使用host进行通信一定要配置
+    deploy: # 这个是编排配置默认节点配置为1 通常这个在配置在docker swarm 环境下使用
+      restart_policy:
+        condition: on-failure
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == worker
+    networks: # 服务一定在要同一个网络下运行这样hostname才会正常生效
+      - structure-cloud-work
+    environment:
+      - APP_PATH=/app/boot/app.jar
+      - JAVA_OPTS=-Xms256m -Xmx1024m
+      - PARAMS=-Dfile.encoding=UTF-8 -Dspring.profiles.active=pro -Djava.security.egd=file:/dev/./urandom -Duser.timezone=Asia/Shanghai
+    healthcheck: #健康检查的探针，这里使用spring-boot的健康检查并没有对端口进行探测
+      test: [ "CMD","/bin/sh","/app/liveness.sh" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+networks:
+  structure-cloud-work:
+    external: true
