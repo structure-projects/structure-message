@@ -32,7 +32,6 @@
         <module>structure-message-plugins</module>
         <module>structure-message-sms-provider</module>
         <module>structure-message-im-provider</module>
-        <module>structure-message-boot</module>
     </modules>
 
     <dependencyManagement>
