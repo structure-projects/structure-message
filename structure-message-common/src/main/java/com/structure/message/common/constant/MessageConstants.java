@@ -63,4 +63,27 @@ public class MessageConstants {
         public static final String TEMPLATE_CONTENT = "message:template:content:";
         public static final String PLUGIN_STATUS = "message:plugin:status:";
     }
+
+    public static class MessageEvent {
+        public static final String MESSAGE_SENT = "message.sent";
+        public static final String MESSAGE_FAILED = "message.failed";
+        public static final String MESSAGE_RECEIVED = "message.received";
+        public static final String MESSAGE_READ = "message.read";
+        public static final String MESSAGE_DELETED = "message.deleted";
+    }
+
+    // amqp
+    // 消息交换机
+    public static final String EXCHANGE_MESSAGE = "message.exchange";
+
+    // 发送消息队列
+    public static final String QUEUE_SEND = "message.queue.send";
+
+    // 路由键
+    public static final String ROUTING_KEY_SEND = "message.routing.send";
+
+    // 广播模式相关常量
+    public static final String EXCHANGE_BROADCAST = "message.broadcast.exchange";
+    public static final String QUEUE_BROADCAST_PREFIX = "message.queue.broadcast.";
 }
+

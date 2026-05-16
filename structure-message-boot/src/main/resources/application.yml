@@ -40,7 +40,6 @@ spring:
         max-wait: -1ms
         max-idle: 8
         min-idle: 0
-
   # 邮件配置
   mail:
     host: smtp.example.com
@@ -64,6 +63,24 @@ spring:
     validate-on-migrate: true # 执行迁移时是否自动调用验证
     locations: classpath:db/migration
   # 配置数据库，flyway那边就无需再进行数据的配置了
+  rabbitmq:
+    host: 172.24.20.15
+    port: 5672
+    username: root
+    password: 123456
+    virtual-host: /
+    publisher-confirm-type: correlated # 开启confirmCallback
+    publisher-returns: true
+    listener:
+      simple:
+        concurrency: 1
+        max-concurrency: 1
+        prefetch: 50
+        retry:
+          enabled: true    # 开启消费重试机制
+          max-attempts: 3  # 最大重试机制，默认为3
+          initial-interval: 1000  # 重试间隔,单位毫秒,默认1000
+        acknowledge-mode: manual
 # 健康检查配置
 management:
   health:
