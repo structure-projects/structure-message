@@ -154,7 +154,7 @@ public class EmailMessagePlugin extends AbstractMessageChannelPlugin {
         request.setBusinessId(context.getBusinessId());
 
         // 从参数中获取邮件主题
-        String subject = "系统通知"; // 默认主题
+        String subject = context.getSubject(); // 默认主题
         if (context.getParams() != null && context.getParams().containsKey("subject")) {
             subject = (String) context.getParams().get("subject");
         }

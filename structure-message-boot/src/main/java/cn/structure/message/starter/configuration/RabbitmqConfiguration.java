@@ -1,19 +1,31 @@
 package cn.structure.message.starter.configuration;
 
 import cn.structure.message.starter.message.RabbitmqMessageEventHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 import com.structure.message.core.handler.MessageEventHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.PostConstruct;
 
 @Slf4j
 @Configuration
 public class RabbitmqConfiguration {
 
+    @PostConstruct
+    public void init() {
+        log.info("========================================");
+        log.info("RabbitmqConfiguration 正在初始化...");
+        log.info("========================================");
+    }
 
     @Bean
     public MessageEventHandler messageEventHandler(RabbitTemplate rabbitTemplate) {
@@ -22,7 +34,6 @@ public class RabbitmqConfiguration {
 
 
     @Bean
-    @ConditionalOnMissingBean(RabbitTemplate.class)
     public RabbitTemplate createRabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate();
         rabbitTemplate.setConnectionFactory(connectionFactory);
@@ -38,4 +49,26 @@ public class RabbitmqConfiguration {
                 log.info("ReturnCallback message:{},replyCode:{},replyText:{},exchange:{},routingKey:{}", message, replyCode, replyText, exchange, routingKey));
         return rabbitTemplate;
     }
+
+    @Bean
+    public MessageConverter jackson2JsonMessageConverter() {
+        Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter();
+        log.info("配置Jackson2JsonMessageConverter完成");
+        return converter;
+    }
+
+//    @Bean
+//    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(
+//            ConnectionFactory connectionFactory,
+//            MessageConverter messageConverter) {
+//        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+//        factory.setConnectionFactory(connectionFactory);
+//        factory.setMessageConverter(messageConverter);
+//        factory.setConcurrentConsumers(1);
+//        factory.setMaxConcurrentConsumers(5);
+//        factory.setPrefetchCount(50);
+//        factory.setAcknowledgeMode(org.springframework.amqp.core.AcknowledgeMode.MANUAL);
+//        log.info("配置RabbitListener容器工厂完成，使用消息转换器: {}", messageConverter.getClass().getSimpleName());
+//        return factory;
+//    }
 }

@@ -81,6 +81,7 @@ spring:
           max-attempts: 3  # 最大重试机制，默认为3
           initial-interval: 1000  # 重试间隔,单位毫秒,默认1000
         acknowledge-mode: manual
+        default-requeue-rejected: false
 # 健康检查配置
 management:
   health:
