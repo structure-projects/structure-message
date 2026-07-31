@@ -1,13 +1,13 @@
 package com.structure.message.plugin.sms;
 
-import cn.structured.message.common.exception.MessageException;
-import cn.structured.message.common.model.MessageContext;
-import cn.structured.message.common.model.MessageResult;
-import cn.structured.message.common.plugin.MessageChannelConfig;
-import cn.structured.message.common.sms.SmsProvider;
-import cn.structured.message.common.sms.SmsRequest;
-import cn.structured.message.common.sms.SmsResponse;
+import com.structure.message.common.exception.MessageException;
+import com.structure.message.common.model.MessageContext;
+import com.structure.message.common.model.MessageResult;
+import com.structure.message.common.plugin.MessageChannelConfig;
 import com.structure.message.plugin.api.AbstractMessageChannelPlugin;
+import com.structure.message.common.sms.SmsRequest;
+import com.structure.message.common.sms.SmsResponse;
+import com.structure.message.common.sms.SmsProvider;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

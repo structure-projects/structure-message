@@ -5,34 +5,58 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>cn.structured</groupId>
-        <artifactId>structure-message-dependencies</artifactId>
-        <version>${revision}</version>
-        <relativePath>../structure-message-dependencies/pom.xml</relativePath>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.18</version>
+        <relativePath/><!-- lookup parent from repository -->
     </parent>
 
     <artifactId>structure-message-boot</artifactId>
-    <name>structure-message-boot</name>
+    <name>message-boot</name>
     <description>消息中心启动模块</description>
     <packaging>jar</packaging>
 
+    <version>${revision}</version>
+
+    <properties>
+        <structure.version>1.2.10</structure.version>
+        <revision>1.0.1-SNAPSHOT</revision>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-boot.version>2.7.18</spring-boot.version>
+        <structure-message.version>${revision}</structure-message.version>
+        <structure-security.version>1.0.3</structure-security.version>
+        <structure-oauth.version>1.0.3</structure-oauth.version>
+        <structure-cloud.version>1.0.3</structure-cloud.version>
+    </properties>
+
     <dependencies>
+        <!-- spring 启动依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+
+        <!-- 日志插件依赖 -->
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>structure-log-starter</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>structure-mybatis-plus-starter</artifactId>
@@ -49,59 +73,72 @@
             <groupId>cn.structured</groupId>
             <artifactId>structure-restful-web-starter</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
-
+        <!-- 核心模块 -->
         <dependency>
             <groupId>cn.structured</groupId>
-            <artifactId>structure-message-interfaces</artifactId>
+            <artifactId>structure-message-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>cn.structured</groupId>
-            <artifactId>structure-message-repository-mybatis</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>message-center-plugin-internal</artifactId>
+            <version>${structure-message.version}</version>
         </dependency>
+        <!-- 邮件插件模块 -->
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>message-center-plugin-email</artifactId>
+            <version>${structure-message.version}</version>
         </dependency>
+
+        <!-- 短信插件模块 -->
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>message-center-plugin-sms</artifactId>
+            <version>${structure-message.version}</version>
         </dependency>
+
+        <!-- IM插件模块 -->
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>message-center-plugin-im</artifactId>
+            <version>${structure-message.version}</version>
         </dependency>
 
+        <!-- IM服务提供商 -->
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>structure-message-im-feishu-provider</artifactId>
+            <version>${structure-message.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>structure-message-im-dingtalk-provider</artifactId>
+            <version>${structure-message.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>structure-message-im-wechatwork-provider</artifactId>
+            <version>${structure-message.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>structure-message-im-netease-provider</artifactId>
+            <version>${structure-message.version}</version>
         </dependency>
 
+        <!-- 插件API（用于扩展存储实现） -->
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>structure-message-plugin-api</artifactId>
+            <version>${structure-message.version}</version>
         </dependency>
 
+        <!-- 配置处理器 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
@@ -109,55 +146,96 @@
         </dependency>
 
         <dependency>
-            <groupId>cn.structured</groupId>
-            <artifactId>structure-security-jwt-starter</artifactId>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-mysql</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>structure-jwt-security-starter</artifactId>
+            <version>${structure-security.version}</version>
+        </dependency>
+
+        <!-- Spring Cloud 基础 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
+
+        <!-- Registry 注册中心相关 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
+        <!-- Config 配置中心相关 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>swagger-bootstrap-ui</artifactId>
+        </dependency>
+        <!--远程调用-->
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
+        <!--负载均衡-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
     </dependencies>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-boot-parent</artifactId>
+                <version>${structure.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-message</artifactId>
+                <version>${structure-message.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-cloud-dependencies</artifactId>
+                <version>${structure-cloud.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>cn.structured</groupId>
+                <artifactId>structure-oauth-dependencies</artifactId>
+                <version>${structure-oauth.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
-        <finalName>message-service</finalName>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
+        <finalName>structure-message-center</finalName>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <compilerArgs>
-                        <arg>-parameters</arg>
-                    </compilerArgs>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                </configuration>
                 <executions>
                     <execution>
                         <goals>

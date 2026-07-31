@@ -1,9 +1,9 @@
 package com.structure.message.plugin.email;
 
-import cn.structured.message.common.exception.MessageException;
-import cn.structured.message.common.model.MessageContext;
-import cn.structured.message.common.model.MessageResult;
-import cn.structured.message.common.plugin.MessageChannelConfig;
+import com.structure.message.common.exception.MessageException;
+import com.structure.message.common.model.MessageContext;
+import com.structure.message.common.model.MessageResult;
+import com.structure.message.common.plugin.MessageChannelConfig;
 import com.structure.message.plugin.api.AbstractMessageChannelPlugin;
 import com.structure.message.plugin.email.model.EmailRequest;
 import com.structure.message.plugin.email.model.EmailResponse;

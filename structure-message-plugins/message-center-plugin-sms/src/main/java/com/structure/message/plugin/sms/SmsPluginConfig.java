@@ -1,6 +1,6 @@
 package com.structure.message.plugin.sms;
 
-import cn.structured.message.common.sms.SmsProviderConfig;
+import com.structure.message.common.sms.SmsProviderConfig;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

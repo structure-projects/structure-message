@@ -1,6 +1,6 @@
 package com.structure.message.plugin.internal.mapper;
 
-import cn.structured.message.common.model.MessageAccessory;
+import com.structure.message.common.model.MessageAccessory;
 import com.structure.message.plugin.internal.InternalMessageDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

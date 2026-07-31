@@ -84,7 +84,7 @@
         AND is_deleted = FALSE
     </update>
 
-    <select id="selectAccessoriesByMessageId" resultType="cn.structured.message.common.model.MessageAccessory">
+    <select id="selectAccessoriesByMessageId" resultType="com.structure.message.common.model.MessageAccessory">
         SELECT
             id as accessoryId,
             resource_type as resourceType,

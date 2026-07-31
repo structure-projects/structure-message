@@ -4,10 +4,6 @@ target/
 !**/src/main/**
 !**/src/test/**
 
-node_modules
-dist
-*.local
-
 ### STS ###
 .apt_generated
 .classpath
@@ -16,9 +12,10 @@ dist
 .settings
 .springBeans
 .sts4-cache
-
+logs
 ### IntelliJ IDEA ###
 .idea
+.mvn
 *.iws
 *.iml
 *.ipr
@@ -33,16 +30,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-### macOS ###
-.DS_Store
-
-### Logs ###
-logs
-*.log
-
-### Env ###
-.env
-
-### Maven Flatten Plugin ###
-**/pom-xml-flattened

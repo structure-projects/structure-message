@@ -1,10 +1,10 @@
 package com.structure.message.plugin.sms.tencent;
 
-import cn.structured.message.common.exception.MessageException;
-import cn.structured.message.common.plugin.MessageChannelConfig;
-import cn.structured.message.common.sms.SmsProvider;
-import cn.structured.message.common.sms.SmsRequest;
-import cn.structured.message.common.sms.SmsResponse;
+import com.structure.message.common.exception.MessageException;
+import com.structure.message.common.plugin.MessageChannelConfig;
+import com.structure.message.common.sms.SmsProvider;
+import com.structure.message.common.sms.SmsRequest;
+import com.structure.message.common.sms.SmsResponse;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.sms.v20210111.SmsClient;

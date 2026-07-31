@@ -1,12 +1,11 @@
 package com.structure.message.plugin.email;
 
-import cn.structured.message.common.exception.MessageException;
-import cn.structured.message.common.plugin.MessageChannelConfig;
+import com.structure.message.common.exception.MessageException;
+import com.structure.message.common.plugin.MessageChannelConfig;
 import com.structure.message.plugin.email.model.EmailRequest;
 import com.structure.message.plugin.email.model.EmailResponse;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -15,6 +14,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
+import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;

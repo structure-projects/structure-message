@@ -5,11 +5,11 @@ import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
 import com.aliyun.dysmsapi20170525.models.SendSmsResponse;
 import com.aliyun.teaopenapi.models.Config;
 import com.alibaba.fastjson.JSON;
-import cn.structured.message.common.exception.MessageException;
-import cn.structured.message.common.plugin.MessageChannelConfig;
-import cn.structured.message.common.sms.SmsProvider;
-import cn.structured.message.common.sms.SmsRequest;
-import cn.structured.message.common.sms.SmsResponse;
+import com.structure.message.common.exception.MessageException;
+import com.structure.message.common.plugin.MessageChannelConfig;
+import com.structure.message.common.sms.SmsProvider;
+import com.structure.message.common.sms.SmsRequest;
+import com.structure.message.common.sms.SmsResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
