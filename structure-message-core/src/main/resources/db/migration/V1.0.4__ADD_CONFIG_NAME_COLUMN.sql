@@ -1,1 +1,0 @@
-ALTER TABLE org_channel_config ADD COLUMN config_name VARCHAR(100) NULL COMMENT '配置名称' AFTER channel_id;

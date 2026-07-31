@@ -6,12 +6,12 @@
 
     <parent>
         <groupId>cn.structured</groupId>
-        <artifactId>structure-message</artifactId>
+        <artifactId>structure-message-dependencies</artifactId>
         <version>${revision}</version>
+        <relativePath>../structure-message-dependencies/pom.xml</relativePath>
     </parent>
 
     <artifactId>structure-message-plugins</artifactId>
-    <version>${revision}</version>
     <name>message-center-plugins</name>
     <description>消息中心插件模块</description>
     <packaging>pom</packaging>
