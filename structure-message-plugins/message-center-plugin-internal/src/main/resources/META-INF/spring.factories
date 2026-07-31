@@ -1,0 +1,2 @@
+#Auto Configuration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.structure.message.plugin.internal.config.AutoInternalConfiguration

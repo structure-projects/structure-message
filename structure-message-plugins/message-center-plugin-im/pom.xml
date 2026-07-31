@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.structured</groupId>
+        <artifactId>structure-message-plugins</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>message-center-plugin-im</artifactId>
+    <name>message-center-plugin-im</name>
+    <description>IM消息插件 - 支持飞书、钉钉、企业微信、微信通知、云信等</description>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <!-- 插件API -->
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>structure-message-plugin-api</artifactId>
+        </dependency>
+
+        <!-- 通用模块 -->
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>structure-message-common</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Autoconfigure -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Configuration Processor -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- IM Providers -->
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>structure-message-im-feishu-provider</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>structure-message-im-dingtalk-provider</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>structure-message-im-wechatwork-provider</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>structure-message-im-wechat-provider</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>structure-message-im-netease-provider</artifactId>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,74 @@
+name: Build and Push to Aliyun
+
+on:
+  release:
+    types: [ published ]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.2.3)'
+        required: true
+        type: string
+
+jobs:
+
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Set release version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "RELEASE_VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+          else
+            echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          fi
+
+      - name: Build project
+        run: |
+          mvn clean install -DskipTests -Drevision=$RELEASE_VERSION -s .mvn/settings.xml
+
+      - name: Run Tests
+        run: |
+          mvn test -Drevision=$RELEASE_VERSION -s .mvn/settings.xml
+
+      - name: Build structure-message-boot
+        run: |
+          cd structure-message-boot
+          mvn clean package -DskipTests -Drevision=$RELEASE_VERSION
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Aliyun ACR
+        uses: docker/login-action@v3
+        with:
+          registry: registry.cn-hangzhou.aliyuncs.com
+          username: ${{ secrets.ALIYUN_ACR_USERNAME }}
+          password: ${{ secrets.ALIYUN_ACR_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: structure-message-boot
+          file: structure-message-boot/Dockerfile
+          push: true
+          tags: |
+            registry.cn-hangzhou.aliyuncs.com/structured/structured-message-center:${{ env.RELEASE_VERSION }}
+            registry.cn-hangzhou.aliyuncs.com/structured/structured-message-center:latest

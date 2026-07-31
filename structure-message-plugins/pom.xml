@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.structured</groupId>
+        <artifactId>structure-message-dependencies</artifactId>
+        <version>${revision}</version>
+        <relativePath>../structure-message-dependencies/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>structure-message-plugins</artifactId>
+    <name>message-center-plugins</name>
+    <description>消息中心插件模块</description>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>structure-message-plugin-api</module>
+        <module>message-center-plugin-internal</module>
+        <module>message-center-plugin-sms</module>
+        <module>message-center-plugin-email</module>
+        <module>message-center-plugin-im</module>
+    </modules>
+
+    <dependencies>
+
+        <!-- Spring Boot Starter -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+</project>

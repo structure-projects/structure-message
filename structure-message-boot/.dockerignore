@@ -1,0 +1,8 @@
+# White-list approach: exclude everything, then allow only what Dockerfile needs
+**/*
+
+# Keep the built jar
+!target/*.jar
+
+# Keep liveness probe script
+!liveness.sh

@@ -1,0 +1,39 @@
+---
+name: common-project-structure
+description: 项目结构约定 - 适用于项目搭建和目录调整
+tools: Read, Write, Edit, Grep, Glob, Bash
+---
+
+你是通用规范（_common）的 project-structure Agent。
+
+**首要动作**：在开始操作前，先用 Read 加载 `prompts/_common/project-structure.md`（完整规范）。以下为操作要点：
+
+
+# 项目结构约定
+
+> 完整规范详见 `prompts/_common/project-structure.md`
+
+## 核心约束
+
+### 多模块项目（MUST）
+
+- **MUST** 按职责划分模块，避免循环依赖。
+- **MUST** 模块命名遵循技术栈约定的命名规范。
+
+### 文档目录（MUST）
+
+```
+docs/
+├── overview.md                 # 概要设计
+├── features/                   # 详细设计
+├── {version}/                  # 版本快照
+└── README.md                   # 文档索引
+```
+
+### 禁止事项
+
+- **禁止** 将生成代码与手写代码混放在同一目录。
+- **禁止** 在 commit 中包含临时文件、IDE 配置、构建产物。
+- **禁止** 在 `README.md` 中写入超前于代码的内容。
+
+完整规则以 `prompts/_common/project-structure.md` 为准。

@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: structure-message-application-test
+
+logging:
+  level:
+    org.springframework: WARN
+    cn.structured: DEBUG

@@ -1,0 +1,75 @@
+server:
+  port: 8080
+spring:
+  profiles:
+    active: dev
+  application:
+    name: message-service
+  cloud:
+    nacos:
+      server-addr: ${NACOS_SERVER:nacos.structured.cn:8848}
+      discovery:
+        namespace: ${NACOS_NAMESPACE:5a4e4c1f-beda-4ae5-a3d7-428950e7473b}
+        metadata:
+          version: @project.version@
+        group: ${NACOS_GROUP:${spring.profiles.active}}
+        enabled: ${NACOS_DISCOVERY_ENABLE:false}
+        username: ${NACOS_USERNAME:structure}
+        password: ${NACOS_PASSWORD:structure}
+      config:
+        server-addr: ${NACOS_SERVER:nacos.structured.cn:8848}
+        namespace: ${NACOS_NAMESPACE:5a4e4c1f-beda-4ae5-a3d7-428950e7473b}
+        group: ${NACOS_GROUP:${spring.profiles.active}}
+        name: ${spring.application.name}
+        file-extension: yaml
+        enabled: ${NACOS_CONFIG_ENABLE:false}
+    username: ${NACOS_USERNAME:structure}
+    password: ${NACOS_PASSWORD:structure}
+
+management:
+  endpoint:
+    health:
+      show-details: always
+logging:
+  level:
+    cn.structured.message: debug
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  group-configs:
+    - group: 'message'
+      packages-to-scan: cn.structured.message.interfaces.controller
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import:
+      - optional:classpath:${spring.application.name}.yaml
+server:
+  port: 18001
+---
+spring:
+  config:
+    activate:
+      on-profile: poc
+    import:
+      - optional:nacos:${spring.application.name}?refreshEnabled=true
+---
+spring:
+  config:
+    activate:
+      on-profile: pro
+    import:
+      - optional:nacos:${spring.application.name}?refreshEnabled=true
+management:
+  server:
+    port: 7777

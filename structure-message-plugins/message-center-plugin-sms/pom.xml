@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.structured</groupId>
+        <artifactId>structure-message-plugins</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>message-center-plugin-sms</artifactId>
+    <name>message-center-plugin-sms</name>
+    <description>短信消息插件</description>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <!-- 插件API -->
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>structure-message-plugin-api</artifactId>
+        </dependency>
+
+        <!-- HTTP客户端 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>structure-message-sms-aliyun-provider</artifactId>
+            <version>${revision}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.structured</groupId>
+            <artifactId>structure-message-sms-tencent-provider</artifactId>
+            <version>${revision}</version>
+            <scope>compile</scope>
+        </dependency>
+
+    </dependencies>
+</project>

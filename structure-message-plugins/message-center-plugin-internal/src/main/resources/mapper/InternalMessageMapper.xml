@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.structure.message.plugin.internal.mapper.InternalMessageMapper">
+
+    <insert id="insert" useGeneratedKeys="false">
+        INSERT INTO internal_message (
+            id, type, sender, receiver, subject, content, channel, 
+            state, org_id, business_id, priority, is_read, 
+            create_time, read_time, create_by, update_by, is_deleted
+        ) VALUES (
+            #{id}, #{type}, #{sender}, #{receiver}, #{subject}, #{content}, #{channel},
+            #{state}, #{orgId}, #{businessId}, #{priority}, #{isRead},
+            #{createTime}, #{readTime}, #{createBy}, #{updateBy}, #{deleted}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE internal_message SET
+            type = #{type},
+            sender = #{sender},
+            receiver = #{receiver},
+            subject = #{subject},
+            content = #{content},
+            channel = #{channel},
+            state = #{state},
+            org_id = #{orgId},
+            business_id = #{businessId},
+            priority = #{priority},
+            is_read = #{isRead},
+            create_time = #{createTime},
+            read_time = #{readTime},
+            create_by = #{createBy},
+            update_by = #{updateBy},
+            is_deleted = #{deleted},
+            update_time = #{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        UPDATE internal_message SET is_deleted = TRUE WHERE id = #{id}
+    </delete>
+
+    <select id="selectById" resultType="com.structure.message.plugin.internal.InternalMessageDTO">
+        SELECT
+            id, type, sender, receiver, subject, content, channel,
+            state, org_id as orgId, business_id as businessId, priority, is_read as isRead,
+            create_time as createTime, read_time as readTime, create_by as createBy,
+            update_by as updateBy, is_deleted as deleted, update_time as updateTime
+        FROM internal_message WHERE id = #{id} AND is_deleted = FALSE
+    </select>
+
+    <select id="selectByUser" resultType="com.structure.message.plugin.internal.InternalMessageDTO">
+        SELECT
+            id, type, sender, receiver, subject, content, channel,
+            state, org_id as orgId, business_id as businessId, priority, is_read as isRead,
+            create_time as createTime, read_time as readTime, create_by as createBy,
+            update_by as updateBy, is_deleted as deleted, update_time as updateTime
+        FROM internal_message
+        WHERE receiver = #{userId} AND org_id = #{orgId} AND is_deleted = FALSE
+        <if test="isRead != null">
+            AND is_read = #{isRead}
+        </if>
+        ORDER BY create_time DESC
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
+    </select>
+
+    <select id="countUnread" resultType="long">
+        SELECT COUNT(*) FROM internal_message
+        WHERE receiver = #{userId} AND org_id = #{orgId} AND is_read = FALSE AND is_deleted = FALSE
+    </select>
+
+    <update id="batchMarkAsRead">
+        UPDATE internal_message SET
+            is_read = TRUE,
+            state = 2,
+            read_time = NOW(),
+            update_time = NOW()
+        WHERE id IN
+        <foreach collection="messageIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND is_deleted = FALSE
+    </update>
+
+    <select id="selectAccessoriesByMessageId" resultType="cn.structured.message.common.model.MessageAccessory">
+        SELECT
+            id as accessoryId,
+            resource_type as resourceType,
+            resource_id as resourceId,
+            resource_name as resourceName,
+            resource_icon as resourceIcon,
+            resource_code as resourceCode,
+            resource_desc as resourceDesc,
+            amount,
+            state
+        FROM message_accessory
+        WHERE message_id = #{messageId}
+        ORDER BY id ASC
+    </select>
+
+</mapper>
