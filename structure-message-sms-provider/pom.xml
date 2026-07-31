@@ -5,8 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.structured</groupId>
-        <artifactId>structure-message</artifactId>
+        <artifactId>structure-message-dependencies</artifactId>
         <version>${revision}</version>
+        <relativePath>../structure-message-dependencies/pom.xml</relativePath>
     </parent>
 
     <packaging>pom</packaging>

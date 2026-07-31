@@ -1,6 +1,8 @@
 package com.structure.message.plugin.internal;
 
-import com.structure.message.common.model.MessageAccessory;
+import cn.structured.message.common.model.MessageAccessory;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,16 +23,19 @@ public class InternalMessageDTO {
 
     private String sender;
 
+    @NotBlank(message = "接收人不能为空")
     private String receiver;
 
     private String subject;
 
+    @NotBlank(message = "消息内容不能为空")
     private String content;
 
     private String channel;
 
     private Integer state;
 
+    @NotNull(message = "组织ID不能为空")
     private Long orgId;
 
     private LocalDateTime createTime;

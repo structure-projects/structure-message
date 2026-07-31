@@ -1,6 +1,6 @@
 package com.structure.message.plugin.sms.tencent;
 
-import com.structure.message.common.sms.SmsProviderConfig;
+import cn.structured.message.common.sms.SmsProviderConfig;
 import lombok.Data;
 
 @Data

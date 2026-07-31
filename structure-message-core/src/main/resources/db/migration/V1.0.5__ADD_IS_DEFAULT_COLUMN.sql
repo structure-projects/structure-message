@@ -1,1 +1,0 @@
-ALTER TABLE org_channel_config ADD COLUMN is_default INT(1) DEFAULT 0 COMMENT '是否默认配置：1-是，0-否' AFTER status;

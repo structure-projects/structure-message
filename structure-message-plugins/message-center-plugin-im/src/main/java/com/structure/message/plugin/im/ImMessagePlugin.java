@@ -1,12 +1,12 @@
 package com.structure.message.plugin.im;
 
-import com.structure.message.common.exception.MessageException;
-import com.structure.message.common.im.ImProvider;
-import com.structure.message.common.im.ImRequest;
-import com.structure.message.common.im.ImResponse;
-import com.structure.message.common.model.MessageContext;
-import com.structure.message.common.model.MessageResult;
-import com.structure.message.common.plugin.MessageChannelConfig;
+import cn.structured.message.common.exception.MessageException;
+import cn.structured.message.common.im.ImProvider;
+import cn.structured.message.common.im.ImRequest;
+import cn.structured.message.common.im.ImResponse;
+import cn.structured.message.common.model.MessageContext;
+import cn.structured.message.common.model.MessageResult;
+import cn.structured.message.common.plugin.MessageChannelConfig;
 import com.structure.message.plugin.api.AbstractMessageChannelPlugin;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

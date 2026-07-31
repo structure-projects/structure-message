@@ -1,7 +1,7 @@
 package com.structure.message.plugin.sms;
 
-import com.structure.message.common.plugin.MessageChannelConfig;
-import com.structure.message.common.sms.SmsProvider;
+import cn.structured.message.common.plugin.MessageChannelConfig;
+import cn.structured.message.common.sms.SmsProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

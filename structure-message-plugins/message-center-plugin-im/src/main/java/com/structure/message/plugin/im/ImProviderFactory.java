@@ -1,7 +1,7 @@
 package com.structure.message.plugin.im;
 
-import com.structure.message.common.im.ImProvider;
-import com.structure.message.common.plugin.MessageChannelConfig;
+import cn.structured.message.common.im.ImProvider;
+import cn.structured.message.common.plugin.MessageChannelConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

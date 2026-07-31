@@ -1,6 +1,6 @@
 package com.structure.message.plugin.internal.storage;
 
-import com.structure.message.common.model.MessageAccessory;
+import cn.structured.message.common.model.MessageAccessory;
 import com.structure.message.plugin.internal.InternalMessageDTO;
 import com.structure.message.plugin.internal.mapper.InternalMessageMapper;
 import lombok.RequiredArgsConstructor;
