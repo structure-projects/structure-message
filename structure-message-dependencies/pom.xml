@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.structured</groupId>
         <artifactId>structure-dependencies</artifactId>
-        <version>1.4.4</version>
+        <version>1.5.0</version>
     </parent>
 
     <name>structure-message-dependencies</name>
@@ -24,7 +24,7 @@
         <spring-boot.version>4.0.6</spring-boot.version>
         <mybatis-plus.version>3.5.16</mybatis-plus.version>
         <springdoc.version>3.0.3</springdoc.version>
-        <structure.version>1.4.4</structure.version>
+        <structure.version>1.5.0</structure.version>
         <spring-cloud.version>2025.1.0</spring-cloud.version>
         <spring-alibaba.version>2025.1.0.0</spring-alibaba.version>
         <spring-cloud-parent.version>5.0.0</spring-cloud-parent.version>

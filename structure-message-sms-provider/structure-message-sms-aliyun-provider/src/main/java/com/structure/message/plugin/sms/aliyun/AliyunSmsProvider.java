@@ -4,7 +4,7 @@ import com.aliyun.dysmsapi20170525.Client;
 import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
 import com.aliyun.dysmsapi20170525.models.SendSmsResponse;
 import com.aliyun.teaopenapi.models.Config;
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import cn.structured.message.common.exception.MessageException;
 import cn.structured.message.common.plugin.MessageChannelConfig;
 import cn.structured.message.common.sms.SmsProvider;
