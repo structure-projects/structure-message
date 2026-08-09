@@ -2,10 +2,13 @@ package cn.structured.message.repository.repository;
 
 import cn.structure.infra.annotations.WriteDelegate;
 import cn.structure.infra.mybatis.plus.repository.MybatisPlusRepositoryDelegate;
+import cn.structured.message.common.dto.MessageRecordQuery;
 import cn.structured.message.domain.entity.MessageRecord;
 import cn.structured.message.infra.repository.delegate.MessageRecordRepositoryDelegate;
 import cn.structured.message.repository.mapper.MessageRecordMapper;
 import cn.structured.message.repository.po.MessageRecordPO;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
@@ -118,5 +121,50 @@ public class MessageRecordRepositoryDelegateImpl extends MybatisPlusRepositoryDe
     @Override
     public long countByStatus(Integer status) {
         return ((MessageRecordMapper) baseMapper).countByStatus(status);
+    }
+
+    @Override
+    public List<MessageRecord> findByQuery(MessageRecordQuery query, long offset, long size) {
+        LambdaQueryWrapper<MessageRecordPO> wrapper = buildQueryWrapper(query);
+        wrapper.orderByDesc(MessageRecordPO::getCreateTime);
+
+        Page<MessageRecordPO> page = new Page<>(offset / size + 1, size);
+        Page<MessageRecordPO> result = baseMapper.selectPage(page, wrapper);
+        return result.getRecords().stream().map(this::toEntity).toList();
+    }
+
+    @Override
+    public long countByQuery(MessageRecordQuery query) {
+        LambdaQueryWrapper<MessageRecordPO> wrapper = buildQueryWrapper(query);
+        return baseMapper.selectCount(wrapper);
+    }
+
+    /**
+     * 构建查询条件
+     *
+     * @param query 查询参数
+     * @return LambdaQueryWrapper
+     */
+    private LambdaQueryWrapper<MessageRecordPO> buildQueryWrapper(MessageRecordQuery query) {
+        LambdaQueryWrapper<MessageRecordPO> wrapper = new LambdaQueryWrapper<>();
+        if (query.getChannelId() != null) {
+            wrapper.eq(MessageRecordPO::getChannelId, query.getChannelId());
+        }
+        if (query.getReceiver() != null && !query.getReceiver().isBlank()) {
+            wrapper.eq(MessageRecordPO::getReceiver, query.getReceiver());
+        }
+        if (query.getStatus() != null) {
+            wrapper.eq(MessageRecordPO::getStatus, query.getStatus());
+        }
+        if (query.getBusinessSource() != null && !query.getBusinessSource().isBlank()) {
+            wrapper.eq(MessageRecordPO::getBusinessSource, query.getBusinessSource());
+        }
+        if (query.getStartTime() != null) {
+            wrapper.ge(MessageRecordPO::getCreateTime, query.getStartTime());
+        }
+        if (query.getEndTime() != null) {
+            wrapper.le(MessageRecordPO::getCreateTime, query.getEndTime());
+        }
+        return wrapper;
     }
 }

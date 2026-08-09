@@ -29,6 +29,13 @@
             <groupId>cn.structured</groupId>
             <artifactId>structure-log-starter</artifactId>
         </dependency>
+        <!-- FastJSON 1.x：structure-security-oauth-resource-starter:1.1.5 的
+             AuthExceptionEntryPoint 运行时调用 com.alibaba.fastjson.JSONObject.toJSONString，
+             starter 自身未声明该依赖，需显式引入，否则认证异常时 NoClassDefFoundError -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>

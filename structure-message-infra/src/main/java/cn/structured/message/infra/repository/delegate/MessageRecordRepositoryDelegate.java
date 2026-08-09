@@ -1,6 +1,7 @@
 package cn.structured.message.infra.repository.delegate;
 
 import cn.structure.infra.repository.RepositoryDelegate;
+import cn.structured.message.common.dto.MessageRecordQuery;
 import cn.structured.message.domain.entity.MessageRecord;
 
 import java.util.List;
@@ -20,4 +21,8 @@ public interface MessageRecordRepositoryDelegate extends RepositoryDelegate<Mess
     List<MessageRecord> findPendingMessages();
 
     long countByStatus(Integer status);
+
+    List<MessageRecord> findByQuery(MessageRecordQuery query, long offset, long size);
+
+    long countByQuery(MessageRecordQuery query);
 }
