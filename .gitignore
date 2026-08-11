@@ -18,6 +18,9 @@ dist
 .sts4-cache
 
 ### IntelliJ IDEA ###
+.mvn/*
+!.mvn/wrapper/
+!.mvn/settings.xml
 .idea
 *.iws
 *.iml
