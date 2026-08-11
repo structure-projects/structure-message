@@ -1,4 +1,4 @@
-name: Release to Maven Central
+﻿name: Release to Maven Central
 
 on:
   release:
@@ -30,7 +30,7 @@ jobs:
         gpg-passphrase: GPG_PASSPHRASE
 
     - name: Cache Maven packages
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
