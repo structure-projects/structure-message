@@ -1,6 +1,7 @@
 package cn.structured.message.domain.repository;
 
 import cn.structure.common.repository.ICrudRepository;
+import cn.structured.message.common.dto.MessageRecordQuery;
 import cn.structured.message.domain.entity.MessageRecord;
 
 import java.util.List;
@@ -68,4 +69,22 @@ public interface MessageRecordRepository extends ICrudRepository<MessageRecord, 
      * @return 消息数量
      */
     long countByStatus(Integer status);
+
+    /**
+     * 根据查询条件分页查询消息记录
+     *
+     * @param query  查询条件
+     * @param offset 偏移量
+     * @param size   每页数量
+     * @return 消息记录列表
+     */
+    List<MessageRecord> findByQuery(MessageRecordQuery query, long offset, long size);
+
+    /**
+     * 根据查询条件统计消息记录数量
+     *
+     * @param query 查询条件
+     * @return 总记录数
+     */
+    long countByQuery(MessageRecordQuery query);
 }

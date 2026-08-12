@@ -11,6 +11,11 @@
         <relativePath>../structure-message-dependencies/pom.xml</relativePath>
     </parent>
 
+
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
+
     <artifactId>structure-message-boot</artifactId>
     <name>structure-message-boot</name>
     <description>消息中心启动模块</description>
@@ -28,6 +33,13 @@
         <dependency>
             <groupId>cn.structured</groupId>
             <artifactId>structure-log-starter</artifactId>
+        </dependency>
+        <!-- FastJSON 1.x：structure-security-oauth-resource-starter:1.1.5 的
+             AuthExceptionEntryPoint 运行时调用 com.alibaba.fastjson.JSONObject.toJSONString，
+             starter 自身未声明该依赖，需显式引入，否则认证异常时 NoClassDefFoundError -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -166,6 +178,35 @@
                     </execution>
                 </executions>
             </plugin>
+        
+            <!-- 启动模块禁止发布到 Maven Central：禁用父 POM 注入的 central-publishing 插件 -->
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>injected-central-publishing</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+    
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
     </build>
 </project>

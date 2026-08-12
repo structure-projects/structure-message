@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.structured</groupId>
         <artifactId>structure-dependencies</artifactId>
-        <version>1.4.4</version>
+        <version>1.5.0</version>
     </parent>
 
     <name>structure-message-dependencies</name>
@@ -24,13 +24,17 @@
         <spring-boot.version>4.0.6</spring-boot.version>
         <mybatis-plus.version>3.5.16</mybatis-plus.version>
         <springdoc.version>3.0.3</springdoc.version>
-        <structure.version>1.4.4</structure.version>
+        <structure.version>1.5.0</structure.version>
         <spring-cloud.version>2025.1.0</spring-cloud.version>
         <spring-alibaba.version>2025.1.0.0</spring-alibaba.version>
         <spring-cloud-parent.version>5.0.0</spring-cloud-parent.version>
         <bouncycastle.version>1.84</bouncycastle.version>
         <commons-fileupload.version>1.6.0</commons-fileupload.version>
         <structure-security.version>1.1.5</structure-security.version>
+        <!-- FastJSON 1.x：structure-security-oauth-resource-starter:1.1.5 的
+             AuthExceptionEntryPoint 使用 com.alibaba.fastjson.JSONObject，
+             而父 BOM structure-dependencies:1.5.0 仅管理 fastjson2，需显式声明 1.x -->
+        <fastjson1.version>1.2.83</fastjson1.version>
         <structure-datascope.version>1.0.3</structure-datascope.version>
         <structure-infra.version>1.3.1</structure-infra.version>
         <structure-tenant.version>1.4.3</structure-tenant.version>
@@ -248,6 +252,16 @@
                 <artifactId>structure-security-permission-starter</artifactId>
                 <version>${structure-security.version}</version>
             </dependency>
+
+            <!-- FastJSON 1.x：structure-security-oauth-resource-starter:1.1.5 的
+                 AuthExceptionEntryPoint 运行时依赖 com.alibaba.fastjson.JSONObject，
+                 父 BOM 仅管理 fastjson2，需在此显式管理 1.x 版本，避免 NoClassDefFoundError -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson1.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>cn.structured</groupId>
                 <artifactId>structure-security-jwt-starter</artifactId>

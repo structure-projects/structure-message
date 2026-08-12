@@ -1,6 +1,7 @@
 package cn.structured.message.infra.repository;
 
 import cn.structure.infra.repository.RepositoryFacade;
+import cn.structured.message.common.dto.MessageRecordQuery;
 import cn.structured.message.domain.entity.MessageRecord;
 import cn.structured.message.domain.repository.MessageRecordRepository;
 import cn.structured.message.infra.repository.delegate.MessageRecordRepositoryDelegate;
@@ -44,5 +45,15 @@ public class MessageRecordRepositoryImpl extends RepositoryFacade<MessageRecord,
     @Override
     public long countByStatus(Integer status) {
         return getDelegate().countByStatus(status);
+    }
+
+    @Override
+    public List<MessageRecord> findByQuery(MessageRecordQuery query, long offset, long size) {
+        return getDelegate().findByQuery(query, offset, size);
+    }
+
+    @Override
+    public long countByQuery(MessageRecordQuery query) {
+        return getDelegate().countByQuery(query);
     }
 }

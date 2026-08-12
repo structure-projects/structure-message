@@ -30,7 +30,7 @@ jobs:
         gpg-passphrase: GPG_PASSPHRASE
 
     - name: Cache Maven packages
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
@@ -51,7 +51,7 @@ jobs:
     - name: Deploy structure-message to Maven Central (exclude boot module)
       run: |
         mvn clean deploy -P release,oss -DskipTests -Drevision=$RELEASE_VERSION \
-          -pl '!structure-message-boot' \
+          -pl '!:structure-message-boot' \
           -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true \
           -s .mvn/settings.xml
       env:
