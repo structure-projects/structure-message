@@ -1,4 +1,4 @@
-﻿name: Release to Maven Central
+name: Release to Maven Central
 
 on:
   release:
@@ -51,7 +51,7 @@ jobs:
     - name: Deploy structure-message to Maven Central (exclude boot module)
       run: |
         mvn clean deploy -P release,oss -DskipTests -Drevision=$RELEASE_VERSION \
-          -pl '!structure-message-boot' \
+          -pl '!:structure-message-boot' \
           -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true \
           -s .mvn/settings.xml
       env:
