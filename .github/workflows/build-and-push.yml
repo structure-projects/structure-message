@@ -1,4 +1,4 @@
-﻿name: Build and Push to Aliyun
+name: Build and Push to Aliyun
 
 on:
   release:
@@ -42,11 +42,13 @@ jobs:
 
       - name: Build project
         run: |
-          mvn clean install -DskipTests -Drevision=$RELEASE_VERSION -s .mvn/settings.xml
+          cd structure-message-dependencies
+          mvn clean install -DskipTests -Drevision=$RELEASE_VERSION -s ../.mvn/settings.xml
 
       - name: Run Tests
         run: |
-          mvn test -Drevision=$RELEASE_VERSION -s .mvn/settings.xml
+          cd structure-message-dependencies
+          mvn test -Drevision=$RELEASE_VERSION -s ../.mvn/settings.xml
 
       - name: Build structure-message-boot
         run: |
