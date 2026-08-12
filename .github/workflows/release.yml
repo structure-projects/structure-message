@@ -46,14 +46,16 @@ jobs:
 
     - name: Run Tests
       run: |
-        mvn test -Drevision=$RELEASE_VERSION -s .mvn/settings.xml
+        cd structure-message-dependencies
+        mvn test -Drevision=$RELEASE_VERSION -s ../.mvn/settings.xml
 
     - name: Deploy structure-message to Maven Central (exclude boot module)
       run: |
+        cd structure-message-dependencies
         mvn clean deploy -P release,oss -DskipTests -Drevision=$RELEASE_VERSION \
           -pl '!:structure-message-boot' \
           -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true \
-          -s .mvn/settings.xml
+          -s ../.mvn/settings.xml
       env:
         OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
