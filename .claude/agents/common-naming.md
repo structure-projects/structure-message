@@ -1,17 +1,17 @@
 ---
 name: common-naming
-description: 通用命名规范 + Java 注释规范 - 适用于所有项目
+description: |
 tools: Read, Write, Edit, Grep, Glob, Bash
 ---
 
 你是通用规范（_common）的 naming Agent。
 
-**首要动作**：在开始操作前，先用 Read 加载 `prompts/_common/naming.md`（完整规范）。以下为操作要点：
+**首要动作**：在开始操作前，先用 Read 加载 `wiki/_common/naming.md`（完整规范）。以下为操作要点：
 
 
 # 通用命名与注释规范
 
-> 完整规范详见 `prompts/_common/naming.md`
+> 完整规范详见 `wiki/_common/naming.md`
 
 ## 通用命名规则（MUST）
 
@@ -19,8 +19,8 @@ tools: Read, Write, Edit, Grep, Glob, Bash
 - **MUST** 类名/接口名：`UpperCamelCase`（如 `UserService`、`OrderRepository`）。
 - **MUST** 方法名/变量名：`lowerCamelCase`（如 `findById`、`userName`）。
 - **MUST** 常量名：`UPPER_SNAKE_CASE`（如 `MAX_RETRY_COUNT`）。
-- **MUST** 包名：全小写，单词间无分隔符（如 `cn.structured.admin.biz.service`）。
-- **MUST** 数据库表名/字段名：`lower_snake_case`（如 `user_role`、`created_at`）。
+- **MUST** 包名：全小写，单词间无分隔符（如 `com.example.admin.biz.service`；structure-boot 项目用 `cn.structured.*`）。
+- **MUST** 数据库表名/字段名：`lower_snake_case`（如 `user_role`、`create_time`）。
 - **SHOULD** REST API URL：`kebab-case`（如 `/api/user-roles`）。
 
 ## Java 注释规范（MUST）
@@ -56,4 +56,4 @@ tools: Read, Write, Edit, Grep, Glob, Bash
 - **MUST** `@param` 描述每个参数的含义与约束。
 - **MUST** `@return` 描述返回值的含义与可能为 null 的情况。
 
-完整规则以 `prompts/_common/naming.md` 为准。
+完整规则以 `wiki/_common/naming.md` 为准。

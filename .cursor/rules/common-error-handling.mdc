@@ -1,0 +1,64 @@
+---
+description: |
+  当用户要求"异常处理/错误码/抛异常/全局异常/异常分类"时触发。
+  覆盖异常分类、错误码规范、全局异常处理、异常传播、日志记录。
+
+triggers:
+  - 异常处理
+  - 错误码
+  - 抛异常
+  - 全局异常
+  - 异常分类
+  - exception
+  - error
+  - 错误处理
+
+priority: high
+alwaysApply: false
+globs: "**/*.java, **/*.ts, changes/**/*.md"
+
+category: error-handling
+stack: _common
+role: common
+maturity: complete
+
+reads-before-action:
+  - wiki/_common/error-handling.md
+
+related-skills:
+  - coding
+  - debug-issue
+
+when-to-use: |
+  实现异常处理、定义错误码、编写全局异常处理器
+when-not-to-use: |
+  仅阅读异常处理代码
+version: "0.3.0"
+since: "2026-08-13"
+---
+
+# 错误处理规范
+
+> 完整规范详见 `wiki/_common/error-handling.md`
+
+## 硬约束（MUST）
+
+- ✅ **MUST** 业务异常用 `CommonException` + `{X}ExceptionEnum`
+- ✅ **MUST** 错误码格式 `{MODULE}_{3 位数字}`（如 `USER_001`）
+- ✅ **MUST** 错误码集中管理在 `{X}ExceptionEnum`
+- ✅ **MUST** Controller 用 `ResultUtilSimpleImpl.fail()` 返回（不抛异常）
+- ✅ **MUST** 全局异常处理器 `@RestControllerAdvice`
+- ✅ **MUST** 业务异常 `log.warn`（不打堆栈），系统异常 `log.error`（打堆栈）
+
+## 禁止（MUST NOT）
+
+- ❌ 在 Controller 直接抛异常给客户端
+- ❌ 在 Repository / Mapper 抛业务异常
+- ❌ 吞异常（catch 后不处理 / 不记录）
+- ❌ 用 HTTP 状态码代替业务错误码
+- ❌ 在异常消息含敏感信息（SQL / 堆栈 / 密钥）
+
+## 关联
+
+- Wiki：`wiki/_common/error-handling.md`
+- 技能：`coding` / `debug-issue`

@@ -1,0 +1,44 @@
+# Changes 配置（项目级）
+# 本文件由 install.sh 安装到目标项目，控制 Changes 层和信任级别行为。
+
+# ===== 信任级别 =====
+# 三级：strict / standard / autonomous
+# 默认：standard
+# 详见 _common/rules/common-trust-level.mdc
+
+trust-level: standard
+
+# 项目级额外自动决策项（在 standard 基础上更松）
+extra-auto-decisions: []
+  # - project-form      # 本项目形态已确定，不用再问
+  # - branch-naming
+
+# 项目级额外必须确认项（在 standard 基础上更严）
+extra-require-confirm: []
+  # - npm-publish       # 本项目发布要额外确认
+  # - helm-upgrade
+
+# ===== 变更管理 =====
+
+# 默认变更级别（当 AI 不确定时）
+default-change-level: major  # trivial | minor | major | hotfix | migration
+
+# 是否强制要求 proposal（false 则 trivial 级别可跳过）
+require-proposal: true
+
+# 是否强制要求 review
+require-review: true
+
+# 是否强制要求 changelog
+require-changelog: true
+
+# ===== SDLC 流程 =====
+
+# 是否启用双流程（新项目 HLD→LLD→coding / 历史项目直接 coding）
+enable-dual-flow: true
+
+# 是否强制要求 HLD（仅新项目）
+require-hld-for-new-project: true
+
+# 是否强制要求 LLD（仅 major 变更）
+require-lld-for-major: true
