@@ -72,5 +72,5 @@ jobs:
           file: structure-message-boot/Dockerfile
           push: true
           tags: |
-            registry.cn-hangzhou.aliyuncs.com/structured/message-service:${{ env.RELEASE_VERSION }}
-            registry.cn-hangzhou.aliyuncs.com/structured/message-service:latest
+            registry.cn-hangzhou.aliyuncs.com/yunjida/message-service:${{ env.RELEASE_VERSION }}
+            registry.cn-hangzhou.aliyuncs.com/yunjida/message-service:latest
