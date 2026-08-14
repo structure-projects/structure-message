@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   message-service:
-    image: registry.cn-hangzhou.aliyuncs.com/structured/message-service:2.0.0
+    image: registry.cn-hangzhou.aliyuncs.com/yunjida/message-service:2.0.0
     restart: always
     hostname: message-service
     env_file:
