@@ -34,12 +34,12 @@
         <!-- FastJSON 1.x：structure-security-oauth-resource-starter:1.1.5 的
              AuthExceptionEntryPoint 使用 com.alibaba.fastjson.JSONObject，
              而父 BOM structure-dependencies:1.5.0 仅管理 fastjson2，需显式声明 1.x -->
-        <fastjson1.version>1.2.83</fastjson1.version>
+        <fastjson1.version>1.2.84</fastjson1.version>
         <structure-datascope.version>1.0.3</structure-datascope.version>
         <structure-infra.version>1.3.1</structure-infra.version>
         <structure-tenant.version>1.4.3</structure-tenant.version>
         <testcontainers.version>1.20.6</testcontainers.version>
-        <logback.version>1.5.32</logback.version>
+        <logback.version>1.5.34</logback.version>
         <freemarker.version>2.3.34</freemarker.version>
     </properties>
 
