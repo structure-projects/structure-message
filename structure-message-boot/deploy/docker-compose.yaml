@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  message-service:
+    image: registry.cn-hangzhou.aliyuncs.com/structured/message-service:2.0.0
+    restart: always
+    hostname: message-service
+    env_file:
+      - .env
+    deploy:
+      restart_policy:
+        condition: on-failure
+      replicas: 1
+    networks:
+      - structure-cloud-work
+    environment:
+      - APP_PATH=/app/boot/app.jar
+      - JAVA_OPTS=-Xms256m -Xmx1024m
+      - PARAMS=-Dfile.encoding=UTF-8 -Dspring.profiles.active=pro -Djava.security.egd=file:/dev/./urandom -Duser.timezone=Asia/Shanghai
+    healthcheck:
+      test: ["CMD","/bin/sh","/app/liveness.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  structure-cloud-work:
+    external: true

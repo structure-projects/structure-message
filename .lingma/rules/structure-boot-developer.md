@@ -1,16 +1,46 @@
-> **通用规范** (已安装于 `prompts/_common/`):
-> - `prompts/_common/api-design.md`: API 设计通用原则
-> - `prompts/_common/architecture.md`: 分层架构通用原则
-> - `prompts/_common/code-review.md`: Code Review 通用原则
-> - `prompts/_common/documentation.md`: 文档管理规范
-> - `prompts/_common/error-handling.md`: 错误处理公约
-> - `prompts/_common/git.md`: Git 分支策略与工作流规范
-> - `prompts/_common/logging.md`: 日志规范
-> - `prompts/_common/naming.md`: 通用命名规范
-> - `prompts/_common/project-structure.md`: 项目结构约定
-> - `prompts/_common/security.md`: 安全基线
-> - `prompts/_common/testing.md`: 测试策略
-> - `prompts/_common/version-management.md`: 版本管理规范
+---
+alwaysApply: true
+globs: "**/*.java, **/*.kt, **/pom.xml, changes/**/*.md, docs/**/*.md, README.md, AGENTS.md, CLAUDE.md"
+description: structure-projects 生态 Java/Kotlin 开发约束。编辑 Java/Kotlin 源码或 pom.xml 时自动加载,涵盖包名红线、分层、Controller/Delegate/Feign/事件规程。
+---
+
+> **通用规范** (已安装于 `wiki/_common/`):
+> - `wiki/_common/api-design.md`: API 设计通用原则
+> - `wiki/_common/architecture.md`: 分层架构通用原则
+> - `wiki/_common/cache-design.md`: 缓存设计规范
+> - `wiki/_common/ci-cd-pipeline.md`: CI/CD 流水线规范
+> - `wiki/_common/code-review-checklist.md`: Code Review 通用原则
+> - `wiki/_common/coding-conventions.md`: 通用编码约定（coding-conventions）
+> - `wiki/_common/concurrency.md`: 并发编程规范
+> - `wiki/_common/database-design.md`: 数据库设计规范
+> - `wiki/_common/deployment.md`: 部署规范
+> - `wiki/_common/detailed-design.md`: 详细设计（LLD）规范
+> - `wiki/_common/distributed-transaction.md`: 分布式事务规范
+> - `wiki/_common/docker.md`: Docker 规范
+> - `wiki/_common/documentation.md`: 文档管理规范
+> - `wiki/_common/error-handling.md`: 错误处理公约
+> - `wiki/_common/git-workflow.md`: Git 工作流（分级规范）
+> - `wiki/_common/git.md`: Git 分支策略与工作流规范
+> - `wiki/_common/github-workflow.md`: GitHub 工作流（gh CLI + PR + Release）
+> - `wiki/_common/high-level-design.md`: 概要设计（HLD）规范
+> - `wiki/_common/kubernetes.md`: Kubernetes 规范
+> - `wiki/_common/legacy-onboarding.md`: 老项目接入指南
+> - `wiki/_common/logging.md`: 日志规范
+> - `wiki/_common/maven-publish.md`: Maven 发布规范
+> - `wiki/_common/messaging.md`: 消息队列规范
+> - `wiki/_common/migration-strategies.md`: 迁移策略详解
+> - `wiki/_common/model-design.md`: 模型设计规范
+> - `wiki/_common/naming.md`: 通用命名规范
+> - `wiki/_common/npm-publish.md`: npm 发布规范
+> - `wiki/_common/observability.md`: 可观测性规范
+> - `wiki/_common/performance.md`: 性能优化规范
+> - `wiki/_common/project-form-decision.md`: 项目形态决策指南
+> - `wiki/_common/project-structure.md`: 项目结构约定
+> - `wiki/_common/requirement-analysis.md`: 需求分析规范
+> - `wiki/_common/security.md`: 安全基线
+> - `wiki/_common/testing-strategies.md`: 测试策略
+> - `wiki/_common/transaction.md`: 本地事务规范
+> - `wiki/_common/version-management.md`: 版本管理规范
 > 
 > 在编码决策前应加载对应规范文件。
 
@@ -18,7 +48,7 @@
 
 # structure-projects 开发规则
 
-完整规范见 `prompts/structure-boot/developer.md`；组件用法见 `prompts/structure-boot/components.md`；新建项目见 `prompts/structure-boot/project-scaffolding.md`；DTO 校验见 `prompts/structure-boot/validation.md`；API 文档见 `prompts/structure-boot/swagger.md`；流水线见 `prompts/structure-boot/ci-cd.md`。以下为关键内联规则：
+完整规范见 `wiki/structure-boot/developer.md`；组件用法见 `wiki/structure-boot/components.md`；新建项目见 `wiki/structure-boot/project-scaffolding.md`；DTO 校验见 `wiki/structure-boot/validation.md`；API 文档见 `wiki/structure-boot/swagger.md`；流水线见 `wiki/structure-boot/ci-cd-pipeline.md`。以下为关键内联规则：
 
 ## 硬约束
 - Maven `groupId` = `cn.structured`
@@ -80,4 +110,4 @@
 - **提交前**：本地 `mvn clean test` 全部通过 + `mvn clean package -DskipTests` 编译通过
 - **禁止** 测试/编译失败仍提交
 
-详细规则（含提交前自检清单）请读 `prompts/structure-boot/developer.md`。
+详细规则（含提交前自检清单）请读 `wiki/structure-boot/developer.md`。

@@ -1,12 +1,13 @@
 ---
-alwaysApply: true
-description: 3 段式语义化版本管理规范 - 适用于所有项目
+alwaysApply: false
+globs: "**/pom.xml, **/build.gradle, **/package.json, **/*.toml, **/README.md"
+description: |
 ---
 
 
 # 版本管理规范
 
-> 完整规范详见 `prompts/_common/version-management.md`
+> 完整规范详见 `wiki/_common/version-management.md`
 
 ## 版本格式（MUST）
 
@@ -26,4 +27,4 @@ description: 3 段式语义化版本管理规范 - 适用于所有项目
 - **MUST** 开发阶段使用 `{X}.{Y}.{Z}-SNAPSHOT`，发布时去掉 `-SNAPSHOT`。
 - **MUST** 分支命名与版本号对应：`feat-1.2.0` 对应功能版本 `1.2.0`。
 - **MUST** 发布前检查 `README.md` 是否与当前版本代码一致。
-- **禁止** 在 README 过期的情况下发布版本。
+- **MUST NOT** 在 README 过期的情况下发布版本。

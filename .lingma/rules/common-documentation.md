@@ -1,7 +1,13 @@
+---
+alwaysApply: false
+globs: "**/*.md"
+description: |
+---
+
 
 # 文档管理规范
 
-> 完整规范详见 `prompts/_common/documentation.md`
+> 完整规范详见 `wiki/_common/documentation.md`
 
 ## 文档目录结构（MUST）
 
@@ -23,7 +29,7 @@ docs/
 1. **确认目标版本号**：X/Y/Z 哪段自增？
 2. **验证设计文档存在**：`docs/features/` 下是否有对应的详细设计文档？
 3. **确认预期交付**：从设计文档提取交付物清单并确认。
-4. **禁止**在设计文档不存在或版本号不明确的情况下开始编码。
+4. **MUST NOT**在设计文档不存在或版本号不明确的情况下开始编码。
 
 ## Changelog 格式（每次变更 MUST 写入）
 

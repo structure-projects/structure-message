@@ -1,21 +1,46 @@
 ---
 alwaysApply: false
+globs: "**/*.md, changes/**/*.md, docs/**/*.md, README.md, AGENTS.md, CLAUDE.md"
 description: structure-projects 生态评审约束。审查 PR / diff / 设计文档时生效。
 ---
 
-> **通用规范** (已安装于 `prompts/_common/`):
-> - `prompts/_common/api-design.md`: API 设计通用原则
-> - `prompts/_common/architecture.md`: 分层架构通用原则
-> - `prompts/_common/code-review.md`: Code Review 通用原则
-> - `prompts/_common/documentation.md`: 文档管理规范
-> - `prompts/_common/error-handling.md`: 错误处理公约
-> - `prompts/_common/git.md`: Git 分支策略与工作流规范
-> - `prompts/_common/logging.md`: 日志规范
-> - `prompts/_common/naming.md`: 通用命名规范
-> - `prompts/_common/project-structure.md`: 项目结构约定
-> - `prompts/_common/security.md`: 安全基线
-> - `prompts/_common/testing.md`: 测试策略
-> - `prompts/_common/version-management.md`: 版本管理规范
+> **通用规范** (已安装于 `wiki/_common/`):
+> - `wiki/_common/api-design.md`: API 设计通用原则
+> - `wiki/_common/architecture.md`: 分层架构通用原则
+> - `wiki/_common/cache-design.md`: 缓存设计规范
+> - `wiki/_common/ci-cd-pipeline.md`: CI/CD 流水线规范
+> - `wiki/_common/code-review-checklist.md`: Code Review 通用原则
+> - `wiki/_common/coding-conventions.md`: 通用编码约定（coding-conventions）
+> - `wiki/_common/concurrency.md`: 并发编程规范
+> - `wiki/_common/database-design.md`: 数据库设计规范
+> - `wiki/_common/deployment.md`: 部署规范
+> - `wiki/_common/detailed-design.md`: 详细设计（LLD）规范
+> - `wiki/_common/distributed-transaction.md`: 分布式事务规范
+> - `wiki/_common/docker.md`: Docker 规范
+> - `wiki/_common/documentation.md`: 文档管理规范
+> - `wiki/_common/error-handling.md`: 错误处理公约
+> - `wiki/_common/git-workflow.md`: Git 工作流（分级规范）
+> - `wiki/_common/git.md`: Git 分支策略与工作流规范
+> - `wiki/_common/github-workflow.md`: GitHub 工作流（gh CLI + PR + Release）
+> - `wiki/_common/high-level-design.md`: 概要设计（HLD）规范
+> - `wiki/_common/kubernetes.md`: Kubernetes 规范
+> - `wiki/_common/legacy-onboarding.md`: 老项目接入指南
+> - `wiki/_common/logging.md`: 日志规范
+> - `wiki/_common/maven-publish.md`: Maven 发布规范
+> - `wiki/_common/messaging.md`: 消息队列规范
+> - `wiki/_common/migration-strategies.md`: 迁移策略详解
+> - `wiki/_common/model-design.md`: 模型设计规范
+> - `wiki/_common/naming.md`: 通用命名规范
+> - `wiki/_common/npm-publish.md`: npm 发布规范
+> - `wiki/_common/observability.md`: 可观测性规范
+> - `wiki/_common/performance.md`: 性能优化规范
+> - `wiki/_common/project-form-decision.md`: 项目形态决策指南
+> - `wiki/_common/project-structure.md`: 项目结构约定
+> - `wiki/_common/requirement-analysis.md`: 需求分析规范
+> - `wiki/_common/security.md`: 安全基线
+> - `wiki/_common/testing-strategies.md`: 测试策略
+> - `wiki/_common/transaction.md`: 本地事务规范
+> - `wiki/_common/version-management.md`: 版本管理规范
 > 
 > 在编码决策前应加载对应规范文件。
 
@@ -23,7 +48,7 @@ description: structure-projects 生态评审约束。审查 PR / diff / 设计�
 
 # structure-projects 评审规则
 
-完整规范见 `prompts/structure-boot/reviewer.md`。以下为关键内联规则：
+完整规范见 `wiki/structure-boot/reviewer.md`。以下为关键内联规则：
 
 ## 评审顺序
 1. 包名与坐标 → 2. 模块依赖方向 → 3. 工具类优先级（自定义限 infra 层） → 4. Bean 注入（构造器 > @Resource > @Autowired 谨慎） → 5. 持久化路径（RepositoryFacade + 显式 toEntity/toPo） → 6. POJO 规范（@Builder + 无参构造 + 参数 ≤ 3） → 7. 统一性（CommonException + ResultUtilSimpleImpl + ResResultVO） → 8. API 出入参（分页签名 `page(query, reqPage)` + CRUD 命名统一） → 9. 用户上下文（非控制层 MUST） → 10. 数据权限（缓存/事件用框架包装） → 11. 多租户 → 12. 安全 → 13. 版本兼容 → 14. 测试 → 15. 文档
@@ -70,4 +95,4 @@ description: structure-projects 生态评审约束。审查 PR / diff / 设计�
 ## 反馈格式
 每条反馈含：位置（`file:line`）、级别（MUST-FIX / SHOULD-FIX / NIT / QUESTION）、依据（引用规则条目）、建议（可落地）。
 
-详细规则请读 `prompts/structure-boot/reviewer.md`。
+详细规则请读 `wiki/structure-boot/reviewer.md`。

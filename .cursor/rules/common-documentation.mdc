@@ -1,12 +1,46 @@
 ---
-description: 文档管理规范 - AI 开发前置验证 + 版本变更日志
-globs: **/*
-alwaysApply: true
+description: |
+  当用户要求"写文档/写 README/写注释/补文档/写 changelog"时触发。
+  覆盖文档管理规范、AI 开发前置验证、版本变更日志。
+  MUST 在编写文档或编码前读本规则自检。
+
+triggers:
+  - 文档
+  - README
+  - 注释
+  - changelog
+  - 变更日志
+  - 写文档
+  - 补文档
+  - documentation
+
+priority: medium
+alwaysApply: false
+globs: "**/*.md"
+
+category: documentation
+stack: _common
+role: common
+maturity: complete
+
+reads-before-action:
+  - wiki/_common/documentation.md
+
+related-skills:
+  - requirement-analysis
+  - coding
+
+when-to-use: |
+  写文档 / README / changelog / 设计文档前
+when-not-to-use: |
+  仅阅读已有文档不修改
+version: "0.3.0"
+since: "2026-08-13"
 ---
 
 # 文档管理规范
 
-> 完整规范详见 `prompts/documentation.md`
+> 完整规范详见 `wiki/documentation.md`
 
 ## 文档目录结构（MUST）
 
@@ -28,7 +62,7 @@ docs/
 1. **确认目标版本号**：X/Y/Z 哪段自增？
 2. **验证设计文档存在**：`docs/features/` 下是否有对应的详细设计文档？
 3. **确认预期交付**：从设计文档提取交付物清单并确认。
-4. **禁止**在设计文档不存在或版本号不明确的情况下开始编码。
+4. **MUST NOT**在设计文档不存在或版本号不明确的情况下开始编码。
 
 ## Changelog 格式（每次变更 MUST 写入）
 
